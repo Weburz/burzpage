@@ -40,7 +40,7 @@ erDiagram
         string categoryName FK
     }
     AUTHOR {
-        int userId PK
+        int authorId PK
         string username
         string profilePicture
         string biogpraphy
@@ -57,15 +57,15 @@ erDiagram
     }
     ROLE {
         string roleName PK
-        int[] userId FK
+        int[] authorId FK
     }
 
     ARTICLE ||--|| CATEGORY : has
     CATEGORY ||--|{ ARTICLE : contains
 
     ARTICLE ||--|| AUTHOR : has
-    AUTHOR }|--|{ ARTICLE : has
+    AUTHOR ||--|{ ARTICLE : has
 
     AUTHOR ||--|| ROLE : has
-    ROLE }|--|{ AUTHOR : contains
+    ROLE ||--|{ AUTHOR : contains
 ````
