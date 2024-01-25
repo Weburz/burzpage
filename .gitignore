@@ -368,4 +368,7 @@ tags
 .history
 .ionide
 
+### Database files ###
+*.db
+
 # End of https://www.toptal.com/developers/gitignore/api/python,node,react,vim,visualstudiocode,astro
