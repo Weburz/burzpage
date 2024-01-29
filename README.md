@@ -46,3 +46,8 @@ erDiagram
     AUTHOR ||--|| ROLE : has
     ROLE ||--|{ AUTHOR : contains
 ````
+
+Planned features:
+
+- Search capabilities on the frontend
+- Comments section
