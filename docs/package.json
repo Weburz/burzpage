@@ -3,10 +3,18 @@
   "scripts": {
     "docs:dev": "vitepress dev --host",
     "docs:build": "vitepress build",
-    "docs:preview": "vitepress preview"
+    "docs:preview": "vitepress preview",
+    "format": "prettier . --write"
   },
   "devDependencies": {
+    "prettier": "^3.2.5",
+    "prettier-plugin-organize-imports": "^3.2.4",
     "typescript": "^5.4.5",
     "vitepress": "^1.1.4"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "proseWrap": "always"
   }
 }
