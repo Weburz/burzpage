@@ -372,7 +372,7 @@ tags
 *.db
 
 ### Vitepress files ###
-**/.vitepress/cache
-**/.vitepress/dist
+docs/.vitepress/cache
+docs/.vitepress/dist
 
 # End of https://www.toptal.com/developers/gitignore/api/python,node,react,vim,visualstudiocode,astro
