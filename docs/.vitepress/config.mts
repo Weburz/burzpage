@@ -6,10 +6,14 @@ export default defineConfig({
   themeConfig: {
     logo: "/favicon.svg",
     socialLinks: [
-      { icon: "github", link: "https://github.com/Weburz/pixiepress" },
+      {
+        icon: "github",
+        link: "https://github.com/Weburz/pixiepress",
+      },
     ],
     footer: {
       message: "Developed with Open-Source <3",
+      copyright: "Copyright &copy; Weburz LLC",
     },
     editLink: {
       pattern: "https://github.com/Weburz/pixiepress/edit/main/docs/:path",
@@ -23,6 +27,24 @@ export default defineConfig({
       },
     },
     externalLinkIcon: true,
+    nav: [
+      {
+        text: "Home",
+        link: "/",
+      },
+      {
+        text: "User Guide",
+        link: "/user-guide",
+      },
+      {
+        text: "Dev Guide",
+        link: "/dev-guide",
+      },
+      {
+        text: "Specifications",
+        link: "/dev-guide/spec-sheet",
+      },
+    ],
   },
   cleanUrls: true,
   srcDir: "./src",
