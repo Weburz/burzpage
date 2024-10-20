@@ -1,0 +1,33 @@
+version: "3"
+
+tasks:
+  setup:
+    desc: Setup the development environment.
+    summary: |
+      Setup the development environment for the project.
+
+      This command will setup the development environment locally by installing
+      all dependencies as well as a setting up other necessities like
+      documentations and so on!
+    cmds:
+      - pre-commit install --install-hooks
+      - task: setup:docs
+
+  setup:docs:
+    internal: true
+    dir: docs
+    sources:
+      - package.json
+    generates:
+      - pnpm-lock.yaml
+    cmd: pnpm install --frozen-lockfile
+
+  docs:
+    desc: Run the documentations locally.
+    summary: |
+      Run the documentations locally during development.
+
+      This command will run the documentation server for local access. It
+      ideally be run during development for reference purposes only.
+    dir: docs
+    cmd: pnpm dev
