@@ -5,7 +5,6 @@ go 1.23.3
 require (
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/swaggo/fiber-swagger v1.3.0
-	github.com/swaggo/swag v1.16.4
 )
 
 require (
@@ -26,6 +25,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/swaggo/files v0.0.0-20220610200504-28940afbdbfe // indirect
+	github.com/swaggo/swag v1.16.4 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect

@@ -32,7 +32,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "petstore.swagger.io",
 	BasePath:         "/v2",
 	Schemes:          []string{},
-	Title:            "Swagger Example API",
+	Title:            "BurzPress API",
 	Description:      "This is a sample server Petstore server.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

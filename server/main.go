@@ -5,11 +5,9 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/swaggo/fiber-swagger"
-
-	_ "github.com/Weburz/burzpress/server/docs"
 )
 
-// @title Swagger Example API
+// @title BurzPress API
 // @version 1.0
 // @description This is a sample server Petstore server.
 // @termsOfService http://swagger.io/terms/
@@ -24,18 +22,12 @@ import (
 // @host petstore.swagger.io
 // @BasePath /v2
 func main() {
-	app := fiber.New(fiber.Config{
-		AppName:       "BurzPress API",
-		StrictRouting: true,
-	})
-
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
+	app := fiber.New()
 
 	app.Get("/swagger/*", fiberSwagger.WrapHandler)
 
-	if err := app.Listen(":8080"); err != nil {
-		log.Fatal("Failed to load the server: %w", err)
+	err := app.Listen(":1323")
+	if err != nil {
+		log.Fatalf("fiber.Listen failed %s", err)
 	}
 }
