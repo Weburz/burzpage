@@ -2,8 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
+
+	"github.com/Weburz/burzcontent/server/internal/logger"
 )
 
 // Define a struct to represent the JSON response
@@ -30,7 +31,10 @@ func main() {
 	// Handle the root path and link it to the handler function
 	http.HandleFunc("/", handler)
 
+	// Create an instance of a logger
+	logger := logger.NewLogger()
+
 	// Start the HTTP server on port 8080
-	fmt.Println("Server started on http://localhost:8080")
+	logger.Info("Server started on http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
 }
