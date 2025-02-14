@@ -1,0 +1,27 @@
+version: "3"
+
+tasks:
+  default:
+    desc: Run the API server in dev mode.
+    summary: |
+      Run the API server in development mode.
+
+      This command will run the server in development mode and it is not intended to be
+      used in other environments.
+    cmds:
+      - task: build
+      - defer: rm -rf ./bin
+      - ./bin/burzcontent
+
+  build:
+    desc: Build the executable binary.
+    summary: |
+      Build the executable binary for the server.
+
+      This command will build the executable binary after compiling the Go source
+      code.
+    sources:
+      - "*.go"
+    generates:
+      - ./bin/burzcontent
+    cmd: go build -o bin/burzcontent ./cmd/burzcontent
