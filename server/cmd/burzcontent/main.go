@@ -2,7 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/Weburz/burzcontent/server/internal/logger"
 )
@@ -34,7 +36,29 @@ func main() {
 	// Create an instance of a logger
 	logger := logger.NewLogger()
 
-	// Start the HTTP server on port 8080
-	logger.Info("Server started on http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	// Get the runtime environment type
+	mode := os.Getenv("ENV")
+
+	// Get the port to access the server at
+	port := os.Getenv("PORT")
+
+	// Conditionally load the HTTP server according to the runtime environment it is
+	// invoked from
+	if mode == "production" {
+		// Start the production HTTP server
+		msg := fmt.Sprintf(
+			"Server started in PRODUCTION mode at http://:::%s",
+			port,
+		)
+		logger.Info(msg)
+		http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
+	} else {
+		// Start the development HTTP server
+		msg := fmt.Sprintf(
+			"Server started in DEVELOPMENT mode at http://127.0.0.1:%s",
+			port,
+		)
+		logger.Info(msg)
+		http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
+	}
 }

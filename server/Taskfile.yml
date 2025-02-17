@@ -8,6 +8,8 @@ tasks:
 
       This command will run the server in development mode and it is not
       intended to be used in other environments.
+    env:
+      PORT: 8080
     cmd: go run ./cmd/burzcontent/main.go
 
   build:
