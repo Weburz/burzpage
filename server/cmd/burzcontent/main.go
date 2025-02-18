@@ -1,75 +1,39 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
-	"os"
 
-	"github.com/Weburz/burzcontent/server/internal/handler/docs"
-	"github.com/Weburz/burzcontent/server/internal/logger"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
-// Define a struct to represent the JSON response
-type Message struct {
-	Message string `json:"message"`
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	// Set the response header to indicate we're sending JSON
-	w.Header().Set("Content-Type", "application/json")
-
-	// Create the response object
-	response := Message{
-		Message: "Hello World!",
-	}
-
-	// Encode the response struct as JSON and write it to the response body
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
-	}
-}
-
 func main() {
-	// Handle the root path and link it to the handler function
-	http.HandleFunc("/", handler)
+	s := CreateNewServer()
+	s.MountHandlers()
+	http.ListenAndServe(":3000", s.Router)
+}
 
-	// Create an instance of a logger
-	logger := logger.NewLogger()
+// HelloWorld api Handler
+func HelloWorld(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Hello World!"))
+}
 
-	// Get the runtime environment type
-	mode := os.Getenv("ENV")
+type Server struct {
+	Router *chi.Mux
+	// Db, config can be added here
+}
 
-	// Get the port to access the server at
-	port := os.Getenv("PORT")
+func CreateNewServer() *Server {
+	s := &Server{}
+	s.Router = chi.NewRouter()
+	return s
+}
 
-	// Conditionally load the HTTP server according to the runtime environment it is
-	// invoked from
-	if mode == "production" {
-		// Start the production HTTP server
-		msg := fmt.Sprintf(
-			"Server started in PRODUCTION mode at http://:::%s",
-			port,
-		)
-		logger.Info(msg)
-		http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
-	} else {
-		// Server the docs ONLY in development mode
-		http.HandleFunc("/docs", docs.DocsHandler)
+func (s *Server) MountHandlers() {
+	// Mount all Middleware here
+	s.Router.Use(middleware.Logger)
 
-		// Start the development HTTP server
-		starterMessage := fmt.Sprintf(
-			"Server started in DEVELOPMENT mode at http://127.0.0.1:%s",
-			port,
-		)
-		logger.Info(starterMessage)
+	// Mount all handlers here
+	s.Router.Get("/", HelloWorld)
 
-		docsMessage := fmt.Sprintf(
-			"The OpenAPI docs are accessible at http://127.0.0.1:%s",
-			port,
-		)
-		logger.Info(docsMessage)
-
-		http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
-	}
 }
