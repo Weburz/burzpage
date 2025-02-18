@@ -8,9 +8,7 @@ tasks:
 
       This command will run the server in development mode and it is not
       intended to be used in other environments.
-    env:
-      PORT: 8080
-    cmd: go run ./cmd/burzcontent/main.go
+    cmd: go run main.go
 
   build:
     desc: Build the executable binary.
@@ -24,3 +22,12 @@ tasks:
     generates:
       - ./bin/burzcontent
     cmd: go build -o bin/burzcontent ./cmd/burzcontent
+
+  test:
+    desc: Run the test suite.
+    summary: |
+      Run the test suite.
+
+      This command will run ALL the available tests in the test suite and print
+      a coverage report for further reference.
+    cmd: go test ./... -v -cover
