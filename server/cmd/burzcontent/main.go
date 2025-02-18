@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/Weburz/burzcontent/server/internal/handler/docs"
 	"github.com/Weburz/burzcontent/server/internal/logger"
 )
 
@@ -53,12 +54,22 @@ func main() {
 		logger.Info(msg)
 		http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
 	} else {
+		// Server the docs ONLY in development mode
+		http.HandleFunc("/docs", docs.DocsHandler)
+
 		// Start the development HTTP server
-		msg := fmt.Sprintf(
+		starterMessage := fmt.Sprintf(
 			"Server started in DEVELOPMENT mode at http://127.0.0.1:%s",
 			port,
 		)
-		logger.Info(msg)
+		logger.Info(starterMessage)
+
+		docsMessage := fmt.Sprintf(
+			"The OpenAPI docs are accessible at http://127.0.0.1:%s",
+			port,
+		)
+		logger.Info(docsMessage)
+
 		http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
 	}
 }
