@@ -12,11 +12,10 @@ Key functionalities:
     error (500).
   - Logs a success message and returns a 200 OK status upon successful response.
 */
-package user
+package users
 
 import (
 	"encoding/json"
-	"log/slog"
 	"net/http"
 )
 
@@ -26,7 +25,7 @@ type message struct {
 }
 
 /*
-GetUserHandler handles HTTP requests to the user endpoint.
+GetUsersHandler handles HTTP requests to the user endpoint.
 It responds with a simple message and logs the request and response details.
 
 The handler performs the following tasks:
@@ -38,7 +37,7 @@ The handler performs the following tasks:
  5. Logs a success message with a 200 OK status after successfully
     sending the response.
 */
-func GetUserHandler(w http.ResponseWriter, r *http.Request) {
+func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 	// Set the Content-Type header to indicate that the response is JSON
 	w.Header().Set("Content-Type", "application/json")
 
@@ -47,32 +46,9 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 		Message: "Hello Jarmos!",
 	}
 
-	// Log details about the incoming request (method, URL, and user-agent)
-	slog.Info(
-		"Handling request",
-		slog.String("method", r.Method),
-		slog.String("url", r.URL.String()),
-		slog.String("user-agent", r.UserAgent()),
-	)
-
 	// Attempt to encode the response into JSON and send it to the client
 	if err := json.NewEncoder(w).Encode(response); err != nil {
-		// If encoding fails, log the error and return an internal server error response
-		slog.Error(
-			"Unable to encode JSON",
-			slog.String("error", err.Error()),
-			slog.String("method", r.Method),
-			slog.String("url", r.URL.String()),
-		)
 		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
 		return
 	}
-
-	// Log the successful response along with the HTTP status code (200 OK)
-	slog.Info(
-		"Successfully processed request",
-		slog.String("method", r.Method),
-		slog.String("url", r.URL.String()),
-		slog.Int("status", http.StatusOK),
-	)
 }

@@ -22,6 +22,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+
+	"github.com/Weburz/burzcontent/server/internal/handler/users"
 )
 
 // HelloWorld api Handler
@@ -94,9 +96,12 @@ This function can be expanded in the future to add more middleware or routes to 
 server.
 */
 func (s *Server) MountHandlers() {
+	r := s.Router
+
 	// Mount all Middleware here
-	s.Router.Use(middleware.Logger)
+	r.Use(middleware.Logger)
 
 	// Mount all handlers here
-	s.Router.Get("/", HelloWorld)
+	r.Get("/", HelloWorld)
+	r.Get("/users", users.GetUsersHandler)
 }
