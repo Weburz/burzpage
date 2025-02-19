@@ -156,6 +156,44 @@ func CreateArticle(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func EditArticle(w http.ResponseWriter, r *http.Request) {}
+/*
+EditArticle handles the HTTP PUT request to update an existing article.
+
+It simulates updating an article (by ID) and returns the updated article as
+a JSON response with a 201 Created status code.
+
+Response:
+  - A 201 Created status code with a JSON object containing the updated article.
+*/
+func EditArticle(w http.ResponseWriter, r *http.Request) {
+	// Get the article ID from the URL parameters
+	articleID := chi.URLParam(r, "id")
+
+	// Create a simulated instance of a new article
+	newArticle := Article{
+		ID:        articleID,
+		Title:     "Learn to Build REST API in Go",
+		Author:    "John Doe",
+		Published: false,
+	}
+
+	// Create a response object to return with for the handler
+	response := map[string]Article{
+		"article": newArticle,
+	}
+
+	// Set the Content-Type to be of JSON
+	w.Header().Set("Content-Type", "application/json")
+
+	// Set an appropriate HTTP status code to return along with the response
+	w.WriteHeader(http.StatusCreated)
+
+	// Return a JSON response from the handler
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(response); err != nil {
+		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
+		return
+	}
+}
 
 func DeleteArticle(w http.ResponseWriter, r *http.Request) {}
