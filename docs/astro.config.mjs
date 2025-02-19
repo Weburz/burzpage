@@ -3,18 +3,18 @@ import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 
 export default defineConfig({
-  site: "https://weburz.github.io/burzpress",
-  base: "burzpress",
+  site: "https://weburz.github.io/burzcontent",
+  base: "burzcontent",
   integrations: [
     starlight({
-      title: "BurzPress",
+      title: "BurzContent",
       description:
         "A fast & lightweight CMS for your blogging needs at any scale!",
       editLink: {
-        baseUrl: "https://github.com/Weburz/burzpress/edit/main/docs",
+        baseUrl: "https://github.com/Weburz/burzcontent/edit/main/docs",
       },
       social: {
-        github: "https://github.com/Weburz/burzpress",
+        github: "https://github.com/Weburz/burzcontent",
         discord: "https://discord.gg/QeYqwyxBhR",
         email: "mailto:contact@weburz.com",
         facebook: "https://www.facebook.com/Weburz",
