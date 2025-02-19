@@ -104,4 +104,5 @@ func (s *Server) MountHandlers() {
 	// Mount all handlers here
 	r.Get("/", HelloWorld)
 	r.Get("/users", users.GetUsersHandler)
+	r.Get("/users/{id}", users.GetUser)
 }

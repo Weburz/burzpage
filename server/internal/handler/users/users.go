@@ -17,6 +17,8 @@ package users
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
 )
 
 // User represents the structure of a User
@@ -60,6 +62,42 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 	response := map[string][]User{
 		"users": users,
 	}
+
+	// Attempt to encode the list of users into JSON and send it to the client
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
+		return
+	}
+}
+
+/*
+GetUser retrieves a user by their ID from the URL, encodes the user data as JSON,
+and sends it as a response. If encoding fails, an internal server error is returned.
+
+URL Parameter:
+  - id (string): The user's unique ID.
+
+Response:
+  - JSON object containing the user's ID, name, and email.
+*/
+func GetUser(w http.ResponseWriter, r *http.Request) {
+	// Fetch the user ID from the request URL parameter
+	userID := chi.URLParam(r, "id")
+
+	// Get the user from the database and store it for further encoding
+	user := User{
+		ID:    userID,
+		Name:  "Somraj Saha",
+		Email: "somraj.saha@weburz.com",
+	}
+
+	// Return the response as a JSON object
+	response := map[string]User{
+		"user": user,
+	}
+
+	// Set the Content-Type header to indicate that the response is JSON
+	w.Header().Set("Content-Type", "application/json")
 
 	// Attempt to encode the list of users into JSON and send it to the client
 	if err := json.NewEncoder(w).Encode(response); err != nil {
