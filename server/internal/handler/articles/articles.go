@@ -12,6 +12,8 @@ package articles
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
 )
 
 /*
@@ -23,6 +25,7 @@ Fields:
 - Published: A boolean indicating if the article is published.
 */
 type Article struct {
+	ID        string `json:"id"`
 	Title     string `json:"title"`
 	Author    string `json:"author"`
 	Published bool   `json:"published"`
@@ -41,16 +44,19 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 	// Simulate a list of in-memory article
 	articles := []Article{
 		{
+			ID:        "2eee23d1-f1d3-4c1e-b22d-f789098c55e7",
 			Title:     "Go Programming Basics",
 			Author:    "John Doe",
 			Published: true,
 		},
 		{
+			ID:        "f83d03bd-cc83-4a19-ae27-099fc8d8fa66",
 			Title:     "Advanced Go Techniques",
 			Author:    "Jane Smith",
 			Published: false,
 		},
 		{
+			ID:        "377be0b6-49ec-43e5-b02e-05e15c95e964",
 			Title:     "Understanding Go Concurrency",
 			Author:    "Alice Johnson",
 			Published: true,
@@ -75,7 +81,43 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func GetArticle(w http.ResponseWriter, r *http.Request) {}
+/*
+GetArticle handles the HTTP GET request to retrieve a specific article by its ID.
+
+It extracts the article ID from the URL parameters, simulates fetching the article,
+and returns it as a JSON response with a 200 OK status code.
+
+Response:
+  - A 200 OK status code with a JSON object containing the article.
+*/
+func GetArticle(w http.ResponseWriter, r *http.Request) {
+	// Get the article ID from the URL parameters
+	articleID := chi.URLParam(r, "id")
+
+	article := Article{
+		ID:        articleID,
+		Title:     "Understanding Go Concurrency",
+		Author:    "Alice Johnson",
+		Published: true,
+	}
+
+	response := map[string]Article{
+		"article": article,
+	}
+
+	// Set the "Content-Type" to be of JSON
+	w.Header().Set("Content-Type", "application/json")
+
+	// Set an appropriate HTTP status code to return along with the response
+	w.WriteHeader(http.StatusOK)
+
+	// Return an JSON response after serialising the struct
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(response); err != nil {
+		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
+		return
+	}
+}
 
 func CreateArticle(w http.ResponseWriter, r *http.Request) {}
 
