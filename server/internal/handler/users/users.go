@@ -105,3 +105,53 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+/*
+UpdateUser updates the user details based on the provided ID in the URL and the request
+body. It reads the user data from the request body, updates the user information, and
+returns the updated user as a JSON response. If the user is not found or there is an
+error, an appropriate error response is returned.
+
+URL Parameter:
+  - id (string): The unique identifier of the user to update.
+
+Request Body:
+  - A JSON object containing the user's new name and email.
+
+Response:
+  - A JSON object containing the updated user's ID, name, and email.
+  - A 201 Created status code on successful update.
+*/
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
+	// Get the user ID from the URL parameter
+	userID := chi.URLParam(r, "id")
+
+	// Decode the incoming request body into the User struct
+	var updatedUser User
+	if err := json.NewDecoder(r.Body).Decode(&updatedUser); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Simulate updating the user (e.g., in a database)
+	// Here we just replace the data for the sake of example
+	user := map[string]User{
+		"user": {
+			ID:    userID,
+			Name:  updatedUser.Name,
+			Email: updatedUser.Email,
+		},
+	}
+
+	// Set the Content-Type header to indicate the response is JSON
+	w.Header().Set("Content-Type", "application/json")
+
+	// Set the HTTP status code to be "Created 201"
+	w.WriteHeader(http.StatusCreated)
+
+	// Return the updated user as JSON
+	if err := json.NewEncoder(w).Encode(user); err != nil {
+		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
+		return
+	}
+}

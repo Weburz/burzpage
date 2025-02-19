@@ -105,4 +105,5 @@ func (s *Server) MountHandlers() {
 	r.Get("/", HelloWorld)
 	r.Get("/users", users.GetUsersHandler)
 	r.Get("/users/{id}", users.GetUser)
+	r.Post("/users/{id}/edit", users.UpdateUser)
 }
