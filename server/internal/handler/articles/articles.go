@@ -119,7 +119,42 @@ func GetArticle(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func CreateArticle(w http.ResponseWriter, r *http.Request) {}
+/*
+CreateArticle handles the HTTP POST request to create a new article.
+
+It simulates creating a new article (in-memory) and returns the created article
+as a JSON response with a 201 Created status code.
+
+Response:
+  - A 201 Created status code with a JSON object containing the created article.
+*/
+func CreateArticle(w http.ResponseWriter, r *http.Request) {
+	// Simulate article creation (in-memory only for now)
+	article := Article{
+		ID:        "1dd9eb62-5af5-44b8-bc5f-b256f6f8f2ee",
+		Title:     "Learn to Build REST API in Go",
+		Author:    "John Doe",
+		Published: false,
+	}
+
+	// Create a response object using the "Article" struct
+	response := map[string]Article{
+		"article": article,
+	}
+
+	// Set the Content-Type to be of JSON
+	w.Header().Set("Content-Type", "application/json")
+
+	// Set an appropriate HTTP status code to return along with the response
+	w.WriteHeader(http.StatusCreated)
+
+	// Return a JSON response by the handler
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(response); err != nil {
+		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
+		return
+	}
+}
 
 func EditArticle(w http.ResponseWriter, r *http.Request) {}
 

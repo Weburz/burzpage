@@ -112,7 +112,7 @@ func (s *Server) MountHandlers() {
 	// Mount all handlers related to the articles
 	r.Get("/articles", articles.GetArticles)
 	r.Get("/articles/{id}", articles.GetArticle)
-	r.Post("/articles/{id}/new", articles.CreateArticle)
+	r.Post("/articles/new", articles.CreateArticle)
 	r.Put("/articles/{id}/edit", articles.EditArticle)
 	r.Delete("/articles/{id}/delete", articles.DeleteArticle)
 }
