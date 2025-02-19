@@ -24,6 +24,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 
 	"github.com/Weburz/burzcontent/server/internal/handler/articles"
+	"github.com/Weburz/burzcontent/server/internal/handler/comments"
 	"github.com/Weburz/burzcontent/server/internal/handler/users"
 )
 
@@ -115,4 +116,10 @@ func (s *Server) MountHandlers() {
 	r.Post("/articles/new", articles.CreateArticle)
 	r.Put("/articles/{id}/edit", articles.EditArticle)
 	r.Delete("/articles/{id}/delete", articles.DeleteArticle)
+
+	// Mount all handlers related to the comments
+	r.Get("/comments", comments.GetComments)
+	r.Get("/comments/article/{id}", comments.GetCommentFromArticle)
+	r.Post("/comments/article/{id}/new", comments.AddComment)
+	r.Get("/comments/{id}/delete", comments.RemoveComment)
 }
