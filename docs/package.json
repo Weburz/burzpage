@@ -7,13 +7,22 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "postinstall": "playwright install chromium"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.29.3",
-    "astro": "^4.16.18",
-    "sharp": "^0.33.5",
     "@astrojs/check": "^0.9.4",
+    "@astrojs/starlight": "^0.29.3",
+    "@beoe/cache": "^0.1.0",
+    "@beoe/rehype-mermaid": "^0.3.0",
+    "astro": "^4.16.18",
+    "playwright": "^1.50.1",
+    "sharp": "^0.33.5",
     "typescript": "^5.7.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
   }
 }

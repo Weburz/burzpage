@@ -1,6 +1,10 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import { rehypeMermaid } from "@beoe/rehype-mermaid";
+import { getCache } from "@beoe/cache";
+
+const cache = getCache();
 
 export default defineConfig({
   site: "https://weburz.github.io/burzcontent",
@@ -39,4 +43,18 @@ export default defineConfig({
       ],
     }),
   ],
+  markdown: {
+    rehypePlugins: [
+      [
+        rehypeMermaid,
+        {
+          strategy: "file",
+          fsPath: "public/beoe",
+          webPath: "/burzcontent/beoe",
+          darkSchema: "class",
+          cache: cache,
+        },
+      ],
+    ],
+  },
 });
