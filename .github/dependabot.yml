@@ -16,7 +16,7 @@ updates:
       - Jarmos-san
 
   - package-ecosystem: "gomod"
-    directory: "./server/v2"
+    directory: "./server"
     schedule:
       interval: daily
     commit-message:
