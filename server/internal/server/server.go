@@ -23,6 +23,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
+	"github.com/Weburz/burzcontent/server/internal/handler/articles"
 	"github.com/Weburz/burzcontent/server/internal/handler/users"
 )
 
@@ -107,4 +108,11 @@ func (s *Server) MountHandlers() {
 	r.Get("/users/{id}", users.GetUser)
 	r.Post("/users/{id}/edit", users.UpdateUser)
 	r.Delete("/users/{id}/delete", users.DeleteUser)
+
+	// Mount all handlers related to the articles
+	r.Get("/articles", articles.GetArticles)
+	r.Get("/articles/{id}", articles.GetArticle)
+	r.Post("/articles/{id}/new", articles.CreateArticle)
+	r.Put("/articles/{id}/edit", articles.EditArticle)
+	r.Delete("/articles/{id}/delete", articles.DeleteArticle)
 }
