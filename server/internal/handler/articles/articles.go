@@ -11,6 +11,7 @@ package articles
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -196,4 +197,25 @@ func EditArticle(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func DeleteArticle(w http.ResponseWriter, r *http.Request) {}
+func DeleteArticle(w http.ResponseWriter, r *http.Request) {
+	// Get the article ID from the URL parameters
+	articleID := chi.URLParam(r, "id")
+
+	// Create a simulated instance of a new article
+	article := &Article{
+		ID:        articleID,
+		Title:     "Learn to Build REST API in Go",
+		Author:    "John Doe",
+		Published: false,
+	}
+
+	fmt.Printf("Article: %v\n", article)
+
+	article = nil
+
+	// Set the Content-Type to JSON
+	w.Header().Set("Content-Type", "application/json")
+
+	// Set an appropriate HTTP status code to return along with the response
+	w.WriteHeader(http.StatusNoContent)
+}
