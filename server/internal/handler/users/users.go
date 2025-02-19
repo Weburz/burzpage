@@ -16,6 +16,7 @@ package users
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -154,4 +155,31 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
 		return
 	}
+}
+
+/*
+DeleteUser handles the HTTP DELETE request to remove a user based on their ID.
+It responds with a 204 No Content status code, indicating the successful deletion
+of the user without returning any content in the response body.
+
+Response:
+  - A 204 No Content status code indicating the user was successfully deleted.
+*/
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	// Get the User ID from the URL parameter
+	userID := chi.URLParam(r, "id")
+
+	user := User{
+		ID:    userID,
+		Name:  "John Doe",
+		Email: "john.doe@example.com",
+	}
+
+	fmt.Printf("%q is deleted\n", user)
+
+	// Set the Content-Type header to indicate the response is JSON
+	w.Header().Set("Content-Type", "application/json")
+
+	// Set the HTTP status code to be "No Content 204"
+	w.WriteHeader(http.StatusNoContent)
 }
