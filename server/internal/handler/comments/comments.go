@@ -77,6 +77,25 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 
 func GetCommentFromArticle(w http.ResponseWriter, r *http.Request) {}
 
-func AddComment(w http.ResponseWriter, r *http.Request) {}
+func AddComment(w http.ResponseWriter, r *http.Request) {
+	// Simulate an example comment for experimentation
+	comment := &Comment{
+		Name:    "Somraj Saha",
+		Content: `This is an experimental comment & it doesn't server anyother purpose`,
+	}
+
+	// Create an object to encode as a JSON response
+	response := map[string]Comment{
+		"comment": *comment,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(response); err != nil {
+		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
+	}
+}
 
 func RemoveComment(w http.ResponseWriter, r *http.Request) {}
