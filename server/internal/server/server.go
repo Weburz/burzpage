@@ -121,5 +121,5 @@ func (s *Server) MountHandlers() {
 	r.Get("/comments", comments.GetComments)
 	r.Get("/comments/article/{id}", comments.GetCommentFromArticle)
 	r.Post("/comments/article/{id}/new", comments.AddComment)
-	r.Get("/comments/{id}/delete", comments.RemoveComment)
+	r.Delete("/comments/{id}/delete", comments.RemoveComment)
 }

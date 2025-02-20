@@ -11,7 +11,10 @@ package comments
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
 )
 
 /*
@@ -23,6 +26,7 @@ Fields:
   - Content: The text content of the comment.
 */
 type Comment struct {
+	ID      string `json:"id"`
 	Name    string `json:"name"`
 	Email   string `json:"email"`
 	Content string `json:"content"`
@@ -98,4 +102,14 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RemoveComment(w http.ResponseWriter, r *http.Request) {}
+func RemoveComment(w http.ResponseWriter, r *http.Request) {
+	commentID := chi.URLParam(r, "id")
+	comment := &Comment{
+		ID: commentID,
+	}
+	fmt.Printf("Deleted comment %v\n", comment)
+	comment = nil
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusNoContent)
+}
