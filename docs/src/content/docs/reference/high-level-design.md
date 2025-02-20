@@ -141,11 +141,17 @@ A DFD illustrates the flow of data between components:
 
 1. **Content Editor** (UI) -> API -> **Backend (Content Management)**
 2. **Backend** -> Database for storage (PostgreSQL)
-3. **Backend** -> Notification Service -> User
-4. **Backend** -> CDN -> User (for static content)
-5. **Admin Dashboard** -> API -> **Backend (Admin Management)**
+3. **Blog** -> Backend -> API -> Database (PostgreSQL)
+4. **Blog** -> End User
 
-**TODO**: Create a sequence diagram for the same.
+```mermaid
+graph TD
+    UI["Content Editor (UI)"] -->|API| BackendContent["Backend (Content Management)"]
+    BackendContent -->|Database| DB["PostgreSQL Database"]
+    DB["PostgreSQL Database"] -->|Database| BackendContent
+    BackendContent["Backend (Content Management)"] -->|API| Blog
+    Blog --> EndUser["End User"]
+```
 
 ## 8. Technology Stack
 
