@@ -1,5 +1,5 @@
 ---
-title: High-Level Design
+title: High-Level Design (HLD)
 ---
 
 ## 1. Introduction
