@@ -17,6 +17,9 @@ importers:
       '@beoe/cache':
         specifier: ^0.1.0
         version: 0.1.0(typescript@5.7.3)
+      '@beoe/pan-zoom':
+        specifier: ^0.0.4
+        version: 0.0.4
       '@beoe/rehype-mermaid':
         specifier: ^0.3.0
         version: 0.3.0(playwright@1.50.1)
@@ -194,6 +197,9 @@ packages:
 
   '@beoe/fenceparser@2.3.0':
     resolution: {integrity: sha512-8BHZ2WoJ+N7kcRzLeXNuNb8v24P9ryZ5ItDpalPTcU91mw8gyv2XqubxVtoPpyssZQWqHZnF3jOCyIwJE3Rdjw==}
+
+  '@beoe/pan-zoom@0.0.4':
+    resolution: {integrity: sha512-WsJBfvrnKNdoHiMQztF5/aUfEc5d5PhrVy0mcrufsV77HuBlG4bcEMZlIEKsfVXCJROkKEcdTEphHhZHu/xCDQ==}
 
   '@beoe/rehype-code-hook-img@0.3.0':
     resolution: {integrity: sha512-isIZWI/ScfLTbcYJsM48wpq1+F3nplbhQFTEtqG1qUAVa5ZJ9U+MWBkgLM8/H2odzuP9R0MNT8qu5kLtZLw7bQ==}
@@ -3246,6 +3252,8 @@ snapshots:
       - typescript
 
   '@beoe/fenceparser@2.3.0': {}
+
+  '@beoe/pan-zoom@0.0.4': {}
 
   '@beoe/rehype-code-hook-img@0.3.0':
     dependencies:

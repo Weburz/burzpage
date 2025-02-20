@@ -42,6 +42,9 @@ export default defineConfig({
         },
       ],
       credits: true,
+      components: {
+        PageFrame: "./src/components/PageFrame.astro",
+      },
     }),
   ],
   markdown: {
