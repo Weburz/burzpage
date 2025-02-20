@@ -4,12 +4,12 @@ title: High-Level Design (HLD)
 
 ## 1. Introduction
 
-The BurzPress Content Management System (CMS) will allow users to create, edit,
-manage, and publish content (primarily blogs and web article). The system will
-have a user-friendly interface and will be accessible to admins, content
-creators, and viewers in addition to providing a developer-friendly API to hook
-custom end-user website on to. It will support various media formats and offer
-features like versioning, user roles, access control, and content approval
+The "**BurzContent**" Content Management System (CMS) will allow users to
+create, edit, manage, and publish content (primarily blogs and web article). The
+system will have a user-friendly interface and will be accessible to admins,
+content creators, and viewers in addition to providing a developer-friendly API
+to hook custom end-user website on to. It will support various media formats and
+offer features like versioning, user roles, access control, and content approval
 workflows, etc.
 
 ## 2. System Overview
@@ -45,7 +45,7 @@ exposed publicly).
 - **Technologies:**
   - Nuxt.js (Vue.js framework for SSR)
   - HTML5, CSS3, TypeScript
-  - RESTful APIs or GraphQL for backend communication
+  - RESTful APIs for backend communication
 
 ### 3.2 Backend Layer
 
@@ -63,10 +63,6 @@ management, and data storage.
   - **Notification Service**: Sends emails or notifications to users about
     content approvals, comments, etc.
 
-- **Technologies:**
-  - Python (FastAPI)
-  - RESTful APIs or GraphQL
-
 ### 3.3 Database Layer
 
 The database stores the content, user data, media files, and other relevant
@@ -76,13 +72,10 @@ information. It should be optimized for performance and scalability.
 
   - **Relational Database (SQL)**: Store user data, roles, permissions, and
     structured content.
-  - **Object Storage**: For media files like images, videos (e.g., AWS S3,
-    Google Cloud Storage).
-  - **Search Engine**: For indexing and querying content (e.g., Elasticsearch).
+  - **Object Storage**: For media files like images, videos (e.g., AWS S3).
 
 - **Technologies:**
   - PostgreSQL for structured data
-  - Elasticsearch for advanced search capabilities
 
 ### 3.4 Authentication & Authorization Service
 
@@ -98,18 +91,6 @@ control (RBAC) and ensure only authorized users can perform certain actions.
 
 - **Technologies:**
   - OAuth2, JWT (JSON Web Tokens)
-  - Identity management services (Auth0, Firebase Auth)
-
-### 3.5 CDN (Content Delivery Network)
-
-For improved performance and faster content delivery, a CDN is used to serve
-static assets like images, videos, and CSS files.
-
-- **Components:**
-
-  - **Static Asset Caching**: Store media files and other assets closer to the
-    user.
-  - **Edge Servers**: Deploy servers worldwide to reduce latency.
 
 ## 4. User Roles and Permissions
 
@@ -155,12 +136,12 @@ graph TD
 
 ## 8. Technology Stack
 
-- **Frontend**: Nuxt.js (Vue.js framework for SSR), HTML5, CSS3, TypeScript
-- **Backend**: Python (FastAPI)
-- **Database**: PostgreSQL, Elasticsearch
-- **Authentication**: OAuth2, JWT
-- **CDN**: ??
-- **Storage**: ??
+- **Frontend**: [Nuxt.js](https://nuxt.com) ([Vue.js](https://vuejs.org)
+  framework for SSR)
+- **Backend**: [Go](https://go.dev)
+- **Database**: [PostgreSQL](https://www.postgresql.org)
+- **Authentication**: [OAuth2](https://oauth.net/2)
+- **Storage**: [Amazon S3](https://aws.amazon.com/s3)
 
 ## 9. Scalability Considerations
 
