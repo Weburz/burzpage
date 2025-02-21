@@ -4,7 +4,63 @@ title: Low-Level Design (LLD)
 
 This document provides a low-level architectural design of the system for both
 developer reference (and for those interested in studying the tool for personal
-fulfillment). The system consists of three primary entities:
+fulfillment). The document will walk you through the the underlying architecture
+of the system and then the relationships between the entities of the system.
+
+## System Architecture
+
+The entire system is powered by multiple services each working in tandem and
+communicating with each other through REST API endpoints. The architectural
+pattern of how the services intermingle with each other is detailed in the
+diagram below:
+
+<!-- TODO: Use the "architecture" diagrams (when they are supported). -->
+<!-- Current implementation of the dependendencies don't support Mermaid v11.1.0+ -->
+
+```mermaid
+---
+title: BurzContent's Architecture
+---
+sequenceDiagram
+    autonumber
+    actor USER
+    participant CMS
+    box rgba(66, 245, 224, 0.35) Backend Systems
+    participant SERVER
+    participant DATABASE
+    end
+    participant BLOG
+    actor READER
+
+    Note over CMS,SERVER : CMS communicates internally using<br/>JWTs generated from user email and password
+    USER ->> CMS : Write content on the CMS
+    activate CMS
+        CMS -) SERVER : Sends HTTP Requests to Server
+        activate SERVER
+            SERVER -) DATABASE : Stores the content
+            SERVER -) CMS : Send HTTP success codes
+        deactivate SERVER
+        CMS ->> USER : Inform user about published content
+    deactivate CMS
+    Note over BLOG,SERVER : Blog communicates externally<br/>using OAuth2.0 client and secret tokens
+    READER ->> BLOG : Requests for content
+    activate BLOG
+        BLOG -) SERVER : Requests for content
+        activate SERVER
+            SERVER -) DATABASE : Fetches requested content
+            SERVER -) BLOG : Provides requested content
+        deactivate SERVER
+        BLOG ->> READER : Consumes content
+    deactivate BLOG
+```
+
+If you have familiarised yourself with the overall system architectural designs
+of the system you should proceed towards learning about the entities of involved
+within the system.
+
+## An Overview of the Entities
+
+The system consists of three primary entities:
 
 1. The "**Users**" are those who can directly interact with and use the platform
    after authenticating themselves to it.
@@ -51,8 +107,6 @@ erDiagram
 To summarise it all, you can read the next succeeding section for a brief
 overview.
 
-### Entities and Relationships
-
 1. **USER** The [`USER`](#users) entity represents individuals in the system who
    create and interact with content. Users can author multiple articles and
    participate in discussions through comments.
@@ -66,14 +120,14 @@ overview.
    users on articles. Each comment is associated with a specific article, and
    users can choose to leave their name and email when commenting.
 
-### Key Relationships
+The key relationships between the entities can be summarised as:
 
 - **User to Article (One-to-Many):** A user can write multiple articles, but
   each article has one author.
 - **Article to Comment (One-to-Many):** An article can have multiple comments,
   but each comment belongs to one specific article.
 
-## Entities of the System
+## A Detailed Reference of the Entities
 
 As mentioned earlier the platform consists of these entities are - "**Users**",
 "**Articles**" and "**Comments**" each interacting with one another in certain
