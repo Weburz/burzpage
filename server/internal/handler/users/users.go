@@ -1,16 +1,12 @@
 /*
-Package user provides HTTP handlers for user-related endpoints.
+Package user provides HTTP handlers for user-related endpoints in a RESTful API.
 
-This package includes a handler `UserHandler` that responds with a list of users
-in JSON format. The handler logs both incoming request details and the outcome
-of processing (success or error).
-
-Key functionalities:
-  - Logs the method, URL, and user-agent for incoming requests.
+The key functionalities include:
+  - Logs the incoming request details (method, URL, and user-agent).
   - Sends a JSON response with a list of users.
-  - Logs error details if JSON encoding fails, and responds with an internal
-    server error (500).
-  - Logs a success message and returns a 200 OK status upon successful response.
+  - Handles error scenarios, including logging errors and responding with internal
+    server errors (500).
+  - Logs success messages with a 200 OK status on successful responses.
 */
 package users
 
@@ -20,51 +16,64 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
 )
 
-// User represents the structure of a User
+/*
+User represents the structure of a User entity.
+
+Fields:
+  - ID: A unique identifier for the user (UUID).
+  - Name: The name of the user.
+  - Email: The email address of the user.
+*/
 type User struct {
-	ID    string `json:"id"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	ID    uuid.UUID `json:"id"`
+	Name  string    `json:"name"`
+	Email string    `json:"email"`
 }
 
 /*
-GetUsersHandler handles HTTP requests to the user endpoint.
-It responds with a list of users in JSON format.
+GetUsersHandler handles HTTP GET requests to retrieve a list of users.
 
 The handler performs the following tasks:
  1. Sets the Content-Type header to "application/json".
- 2. Logs the incoming request, including the HTTP method, URL, and user-agent.
- 3. Attempts to encode the list of users into JSON and send it in the response body.
- 4. Logs any errors if JSON encoding fails, and returns an internal server error
-    (500) to the client.
- 5. Logs a success message with a 200 OK status after successfully sending the response.
+ 2. Logs the incoming request details including the HTTP method, URL, and user-agent.
+ 3. Creates and encodes a list of users into JSON and sends it in the response.
+ 4. If JSON encoding fails, returns an internal server error (500).
+ 5. Logs a success message and returns a 200 OK status after successful response.
 */
 func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
-	// Set the Content-Type header to indicate that the response is JSON
-	w.Header().Set("Content-Type", "application/json")
+	// Simulate generating a unique user ID for the response
+	userID, err := uuid.NewV7()
+	if err != nil {
+		http.Error(w, "Unable to Generate User ID", http.StatusInternalServerError)
+		return
+	}
 
-	// Create a list of users
+	// Create a list of users to simulate a user database
 	users := []User{
 		{
-			ID:    "cb676a46-66fd-4dfb-b839-443f2e6c0b60",
+			ID:    userID,
 			Name:  "Somraj Saha",
 			Email: "somraj.saha@weburz.com",
 		},
 		{
-			ID:    "4f3e23f4-d5d9-4886-90de-f07a93d3c7f5",
+			ID:    userID,
 			Name:  "John Doe",
 			Email: "john.doe@example.com",
 		},
 	}
 
-	// The response to return with when calling this handler
+	// Prepare the response object
 	response := map[string][]User{
 		"users": users,
 	}
 
-	// Attempt to encode the list of users into JSON and send it to the client
+	// Set Content-Type header to JSON
+	w.Header().Set("Content-Type", "application/json")
+
+	// Encode the user data as JSON and send it in the response
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
 		return
@@ -72,35 +81,39 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 /*
-GetUser retrieves a user by their ID from the URL, encodes the user data as JSON,
-and sends it as a response. If encoding fails, an internal server error is returned.
+GetUser handles HTTP GET requests to retrieve a user by their unique ID.
 
 URL Parameter:
-  - id (string): The user's unique ID.
+  - id (string): The unique identifier of the user.
 
 Response:
-  - JSON object containing the user's ID, name, and email.
+  - A JSON object containing the user's ID, name, and email.
+  - Returns a 404 Not Found status if the user ID is invalid.
 */
 func GetUser(w http.ResponseWriter, r *http.Request) {
-	// Fetch the user ID from the request URL parameter
-	userID := chi.URLParam(r, "id")
+	// Fetch the user ID from the URL parameter
+	userID, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "User ID Not Found", http.StatusNotFound)
+		return
+	}
 
-	// Get the user from the database and store it for further encoding
+	// Simulate fetching the user from a database
 	user := User{
 		ID:    userID,
 		Name:  "Somraj Saha",
 		Email: "somraj.saha@weburz.com",
 	}
 
-	// Return the response as a JSON object
+	// Prepare the response object
 	response := map[string]User{
 		"user": user,
 	}
 
-	// Set the Content-Type header to indicate that the response is JSON
+	// Set Content-Type header to JSON
 	w.Header().Set("Content-Type", "application/json")
 
-	// Attempt to encode the list of users into JSON and send it to the client
+	// Encode the user data and return it as a JSON response
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
 		return
@@ -108,24 +121,27 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 }
 
 /*
-UpdateUser updates the user details based on the provided ID in the URL and the request
-body. It reads the user data from the request body, updates the user information, and
-returns the updated user as a JSON response. If the user is not found or there is an
-error, an appropriate error response is returned.
+UpdateUser handles HTTP PUT requests to update a user's details based on their ID.
 
 URL Parameter:
   - id (string): The unique identifier of the user to update.
 
 Request Body:
-  - A JSON object containing the user's new name and email.
+  - A JSON object containing the user's updated name and email.
 
 Response:
   - A JSON object containing the updated user's ID, name, and email.
-  - A 201 Created status code on successful update.
+  - Returns a 400 Bad Request status if the request body is invalid.
+  - Returns a 404 Not Found status if the user ID is invalid.
+  - Returns a 201 Created status after successfully updating the user.
 */
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
-	// Get the user ID from the URL parameter
-	userID := chi.URLParam(r, "id")
+	// Extract the user ID from the URL parameter
+	userID, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "User ID Not Found", http.StatusNotFound)
+		return
+	}
 
 	// Decode the incoming request body into the User struct
 	var updatedUser User
@@ -135,7 +151,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Simulate updating the user (e.g., in a database)
-	// Here we just replace the data for the sake of example
+	// In this example, we just replace the user data for simplicity
 	user := map[string]User{
 		"user": {
 			ID:    userID,
@@ -144,13 +160,13 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	// Set the Content-Type header to indicate the response is JSON
+	// Set Content-Type header to JSON
 	w.Header().Set("Content-Type", "application/json")
 
-	// Set the HTTP status code to be "Created 201"
+	// Set HTTP status code to 201 Created
 	w.WriteHeader(http.StatusCreated)
 
-	// Return the updated user as JSON
+	// Encode the updated user and return it in the response
 	if err := json.NewEncoder(w).Encode(user); err != nil {
 		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
 		return
@@ -158,28 +174,36 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 /*
-DeleteUser handles the HTTP DELETE request to remove a user based on their ID.
-It responds with a 204 No Content status code, indicating the successful deletion
-of the user without returning any content in the response body.
+DeleteUser handles HTTP DELETE requests to remove a user based on their ID.
+
+URL Parameter:
+  - id (string): The unique identifier of the user to delete.
 
 Response:
-  - A 204 No Content status code indicating the user was successfully deleted.
+  - A 204 No Content status code indicating successful deletion of the user.
+  - No response body is returned.
 */
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
-	// Get the User ID from the URL parameter
-	userID := chi.URLParam(r, "id")
+	// Fetch the user ID from the URL parameter
+	userID, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "User ID Not Found", http.StatusNotFound)
+		return
+	}
 
+	// Simulate deleting the user (e.g., from a database)
 	user := User{
 		ID:    userID,
 		Name:  "John Doe",
 		Email: "john.doe@example.com",
 	}
 
+	// Log the deletion
 	fmt.Printf("%q is deleted\n", user)
 
-	// Set the Content-Type header to indicate the response is JSON
+	// Set Content-Type header to JSON
 	w.Header().Set("Content-Type", "application/json")
 
-	// Set the HTTP status code to be "No Content 204"
+	// Set HTTP status code to 204 No Content
 	w.WriteHeader(http.StatusNoContent)
 }
