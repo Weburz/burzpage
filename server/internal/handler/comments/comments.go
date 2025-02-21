@@ -15,6 +15,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
 )
 
 /*
@@ -26,10 +27,10 @@ Fields:
   - Content: The text content of the comment.
 */
 type Comment struct {
-	ID      string `json:"id"`
-	Name    string `json:"name"`
-	Email   string `json:"email"`
-	Content string `json:"content"`
+	ID      uuid.UUID `json:"id"`
+	Name    string    `json:"name"`
+	Email   string    `json:"email"`
+	Content string    `json:"content"`
 }
 
 /*
@@ -43,18 +44,27 @@ Response:
 */
 func GetComments(w http.ResponseWriter, r *http.Request) {
 	// Simulate a list of comments to return
+	commentID, err := uuid.NewV7()
+	if err != nil {
+		http.Error(w, "Comment ID Not Found", http.StatusNotFound)
+		return
+	}
+
 	comments := []Comment{
 		{
+			ID:      commentID,
 			Name:    "John Doe",
 			Email:   "john.doe@example.com",
 			Content: "This is a great article!",
 		},
 		{
+			ID:      commentID,
 			Name:    "Jane Smith",
 			Email:   "jane.smith@example.com",
 			Content: "I found this article really helpful, thanks!",
 		},
 		{
+			ID:      commentID,
 			Name:    "Alice Johnson",
 			Email:   "alice.johnson@example.com",
 			Content: "Interesting perspective, I learned a lot!",
@@ -83,7 +93,17 @@ func GetCommentFromArticle(w http.ResponseWriter, r *http.Request) {}
 
 func AddComment(w http.ResponseWriter, r *http.Request) {
 	// Simulate an example comment for experimentation
+	commentID, err := uuid.NewV7()
+	if err != nil {
+		http.Error(
+			w,
+			"Unable to generate the Comment ID",
+			http.StatusInternalServerError,
+		)
+		return
+	}
 	comment := &Comment{
+		ID:      commentID,
 		Name:    "Somraj Saha",
 		Content: `This is an experimental comment & it doesn't server anyother purpose`,
 	}
@@ -103,7 +123,11 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 }
 
 func RemoveComment(w http.ResponseWriter, r *http.Request) {
-	commentID := chi.URLParam(r, "id")
+	commentID, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "Comment ID Not Found", http.StatusNotFound)
+		return
+	}
 	comment := &Comment{
 		ID: commentID,
 	}
