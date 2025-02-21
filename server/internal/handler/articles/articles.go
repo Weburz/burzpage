@@ -1,8 +1,9 @@
 /*
-Package articles provides HTTP handlers for managing articles.
+Package articles provides HTTP handlers for managing articles in a RESTful API.
 
+Handlers include:
 - GetArticles: Handles the request to retrieve a list of articles.
-- GetArticle: Handles the request to retrieve a single article by its ID.
+- GetArticle: Handles the request to retrieve a specific article by its ID.
 - CreateArticle: Handles the request to create a new article.
 - EditArticle: Handles the request to update an existing article by its ID.
 - DeleteArticle: Handles the request to delete an article by its ID.
@@ -19,12 +20,13 @@ import (
 )
 
 /*
-Article represents an article with a title, author, and publication status.
+Article represents an article with its associated data.
 
 Fields:
-- Title: The title of the article.
-- Author: The author of the article.
-- Published: A boolean indicating if the article is published.
+  - ID: The unique identifier for the article (UUID).
+  - Title: The title of the article.
+  - Author: The author of the article.
+  - Published: A boolean indicating if the article is published.
 */
 type Article struct {
 	ID        uuid.UUID `json:"id"`
@@ -36,14 +38,13 @@ type Article struct {
 /*
 GetArticles handles the HTTP GET request to retrieve a list of articles.
 
-It simulates fetching articles from an in-memory data source and returns the list
-as a JSON response with a 200 OK status code.
+It simulates fetching a list of articles from an in-memory data source and returns
+a JSON response with a 200 OK status code.
 
 Response:
-  - A 200 OK status code with a JSON array of articles.
+  - 200 OK: A JSON object containing an array of articles.
 */
 func GetArticles(w http.ResponseWriter, r *http.Request) {
-	// Simulate a list of in-memory article
 	articleID, err := uuid.NewV7()
 	if err != nil {
 		http.Error(
@@ -74,21 +75,21 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	// Create a response object for the handler to return
+	// Create response object containing articles
 	response := map[string][]Article{
 		"articles": articles,
 	}
 
-	// Encode the struct object to JSON for the handler to return
+	// Encode the response object to JSON
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
 		return
 	}
 
-	// Set the Content-Type to be of JSON
+	// Set Content-Type header to application/json
 	w.Header().Set("Content-Type", "application/json")
 
-	// Set the HTTP status code to be of "200 OK"
+	// Set HTTP status code to 200 OK
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -99,16 +100,17 @@ It extracts the article ID from the URL parameters, simulates fetching the artic
 and returns it as a JSON response with a 200 OK status code.
 
 Response:
-  - A 200 OK status code with a JSON object containing the article.
+  - 200 OK: A JSON object containing the requested article.
 */
 func GetArticle(w http.ResponseWriter, r *http.Request) {
-	// Get the article ID from the URL parameters
+	// Extract article ID from URL parameters
 	articleID, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		http.Error(w, "Article ID Not Found", http.StatusNotFound)
 		return
 	}
 
+	// Simulate fetching the article
 	article := Article{
 		ID:        articleID,
 		Title:     "Understanding Go Concurrency",
@@ -116,17 +118,18 @@ func GetArticle(w http.ResponseWriter, r *http.Request) {
 		Published: true,
 	}
 
+	// Create response object containing the article
 	response := map[string]Article{
 		"article": article,
 	}
 
-	// Set the "Content-Type" to be of JSON
+	// Set Content-Type header to application/json
 	w.Header().Set("Content-Type", "application/json")
 
-	// Set an appropriate HTTP status code to return along with the response
+	// Set HTTP status code to 200 OK
 	w.WriteHeader(http.StatusOK)
 
-	// Return an JSON response after serialising the struct
+	// Encode and return the JSON response
 	encoder := json.NewEncoder(w)
 	if err := encoder.Encode(response); err != nil {
 		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
@@ -141,10 +144,10 @@ It simulates creating a new article (in-memory) and returns the created article
 as a JSON response with a 201 Created status code.
 
 Response:
-  - A 201 Created status code with a JSON object containing the created article.
+  - 201 Created: A JSON object containing the newly created article.
 */
 func CreateArticle(w http.ResponseWriter, r *http.Request) {
-	// Simulate article creation (in-memory only for now)
+	// Simulate article creation (in-memory)
 	articleID, err := uuid.NewV7()
 	if err != nil {
 		http.Error(
@@ -161,18 +164,18 @@ func CreateArticle(w http.ResponseWriter, r *http.Request) {
 		Published: false,
 	}
 
-	// Create a response object using the "Article" struct
+	// Create response object containing the article
 	response := map[string]Article{
 		"article": article,
 	}
 
-	// Set the Content-Type to be of JSON
+	// Set Content-Type header to application/json
 	w.Header().Set("Content-Type", "application/json")
 
-	// Set an appropriate HTTP status code to return along with the response
+	// Set HTTP status code to 201 Created
 	w.WriteHeader(http.StatusCreated)
 
-	// Return a JSON response by the handler
+	// Encode and return the JSON response
 	encoder := json.NewEncoder(w)
 	if err := encoder.Encode(response); err != nil {
 		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
@@ -181,23 +184,23 @@ func CreateArticle(w http.ResponseWriter, r *http.Request) {
 }
 
 /*
-EditArticle handles the HTTP PUT request to update an existing article.
+EditArticle handles the HTTP PUT request to update an existing article by its ID.
 
-It simulates updating an article (by ID) and returns the updated article as
-a JSON response with a 201 Created status code.
+It simulates updating the article and returns the updated article as a JSON response
+with a 200 OK status code.
 
 Response:
-  - A 201 Created status code with a JSON object containing the updated article.
+  - 200 OK: A JSON object containing the updated article.
 */
 func EditArticle(w http.ResponseWriter, r *http.Request) {
-	// Get the article ID from the URL parameters
+	// Extract article ID from URL parameters
 	articleID, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		http.Error(w, "Article ID Not Found", http.StatusNotFound)
 		return
 	}
 
-	// Create a simulated instance of a new article
+	// Simulate creating a new article to replace the old one
 	newArticle := Article{
 		ID:        articleID,
 		Title:     "Learn to Build REST API in Go",
@@ -205,18 +208,18 @@ func EditArticle(w http.ResponseWriter, r *http.Request) {
 		Published: false,
 	}
 
-	// Create a response object to return with for the handler
+	// Create response object containing the updated article
 	response := map[string]Article{
 		"article": newArticle,
 	}
 
-	// Set the Content-Type to be of JSON
+	// Set Content-Type header to application/json
 	w.Header().Set("Content-Type", "application/json")
 
-	// Set an appropriate HTTP status code to return along with the response
-	w.WriteHeader(http.StatusCreated)
+	// Set HTTP status code to 200 OK
+	w.WriteHeader(http.StatusOK)
 
-	// Return a JSON response from the handler
+	// Encode and return the JSON response
 	encoder := json.NewEncoder(w)
 	if err := encoder.Encode(response); err != nil {
 		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
@@ -224,15 +227,24 @@ func EditArticle(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*
+DeleteArticle handles the HTTP DELETE request to remove an article by its ID.
+
+It simulates the deletion of an article and returns a 204 No Content status code to
+indicate successful deletion with no response body.
+
+Response:
+  - 204 No Content: Successful deletion of the article.
+*/
 func DeleteArticle(w http.ResponseWriter, r *http.Request) {
-	// Get the article ID from the URL parameters
+	// Extract article ID from URL parameters
 	articleID, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		http.Error(w, "Article ID Not Found", http.StatusNotFound)
 		return
 	}
 
-	// Create a simulated instance of a new article
+	// Simulate article deletion
 	article := &Article{
 		ID:        articleID,
 		Title:     "Learn to Build REST API in Go",
@@ -240,13 +252,12 @@ func DeleteArticle(w http.ResponseWriter, r *http.Request) {
 		Published: false,
 	}
 
+	// Log the deletion (for simulation purposes)
 	fmt.Printf("Article: %v\n", article)
 
-	article = nil
-
-	// Set the Content-Type to JSON
+	// Set Content-Type header to application/json
 	w.Header().Set("Content-Type", "application/json")
 
-	// Set an appropriate HTTP status code to return along with the response
+	// Set HTTP status code to 204 No Content
 	w.WriteHeader(http.StatusNoContent)
 }
