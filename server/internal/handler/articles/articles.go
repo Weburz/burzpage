@@ -15,6 +15,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
 )
 
 /*
@@ -26,10 +27,10 @@ Fields:
 - Published: A boolean indicating if the article is published.
 */
 type Article struct {
-	ID        string `json:"id"`
-	Title     string `json:"title"`
-	Author    string `json:"author"`
-	Published bool   `json:"published"`
+	ID        uuid.UUID `json:"id"`
+	Title     string    `json:"title"`
+	Author    string    `json:"author"`
+	Published bool      `json:"published"`
 }
 
 /*
@@ -43,21 +44,30 @@ Response:
 */
 func GetArticles(w http.ResponseWriter, r *http.Request) {
 	// Simulate a list of in-memory article
+	articleID, err := uuid.NewV7()
+	if err != nil {
+		http.Error(
+			w,
+			"Unable to generate the Article ID",
+			http.StatusInternalServerError,
+		)
+		return
+	}
 	articles := []Article{
 		{
-			ID:        "2eee23d1-f1d3-4c1e-b22d-f789098c55e7",
+			ID:        articleID,
 			Title:     "Go Programming Basics",
 			Author:    "John Doe",
 			Published: true,
 		},
 		{
-			ID:        "f83d03bd-cc83-4a19-ae27-099fc8d8fa66",
+			ID:        articleID,
 			Title:     "Advanced Go Techniques",
 			Author:    "Jane Smith",
 			Published: false,
 		},
 		{
-			ID:        "377be0b6-49ec-43e5-b02e-05e15c95e964",
+			ID:        articleID,
 			Title:     "Understanding Go Concurrency",
 			Author:    "Alice Johnson",
 			Published: true,
@@ -93,7 +103,11 @@ Response:
 */
 func GetArticle(w http.ResponseWriter, r *http.Request) {
 	// Get the article ID from the URL parameters
-	articleID := chi.URLParam(r, "id")
+	articleID, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "Article ID Not Found", http.StatusNotFound)
+		return
+	}
 
 	article := Article{
 		ID:        articleID,
@@ -131,10 +145,19 @@ Response:
 */
 func CreateArticle(w http.ResponseWriter, r *http.Request) {
 	// Simulate article creation (in-memory only for now)
+	articleID, err := uuid.NewV7()
+	if err != nil {
+		http.Error(
+			w,
+			"Unable to generate the Article ID",
+			http.StatusInternalServerError,
+		)
+		return
+	}
 	article := Article{
-		ID:        "1dd9eb62-5af5-44b8-bc5f-b256f6f8f2ee",
+		ID:        articleID,
 		Title:     "Learn to Build REST API in Go",
-		Author:    "John Doe",
+		Author:    "Somraj Saha",
 		Published: false,
 	}
 
@@ -168,7 +191,11 @@ Response:
 */
 func EditArticle(w http.ResponseWriter, r *http.Request) {
 	// Get the article ID from the URL parameters
-	articleID := chi.URLParam(r, "id")
+	articleID, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "Article ID Not Found", http.StatusNotFound)
+		return
+	}
 
 	// Create a simulated instance of a new article
 	newArticle := Article{
@@ -199,7 +226,11 @@ func EditArticle(w http.ResponseWriter, r *http.Request) {
 
 func DeleteArticle(w http.ResponseWriter, r *http.Request) {
 	// Get the article ID from the URL parameters
-	articleID := chi.URLParam(r, "id")
+	articleID, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "Article ID Not Found", http.StatusNotFound)
+		return
+	}
 
 	// Create a simulated instance of a new article
 	article := &Article{
