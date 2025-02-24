@@ -97,21 +97,27 @@ func (s *Server) MountHandlers() {
 	r.Use(middleware.Logger)
 
 	// Mount all handlers related to users
-	r.Get("/users", users.GetUsers)
-	r.Get("/users/{id}", users.GetUser)
-	r.Post("/users/{id}/edit", users.UpdateUser)
-	r.Delete("/users/{id}/delete", users.DeleteUser)
+	r.Route("/users", func(r chi.Router) {
+		r.Get("/", users.GetUsers)
+		r.Get("/{id}", users.GetUser)
+		r.Post("/{id}/edit", users.UpdateUser)
+		r.Delete("/{id}/delete", users.DeleteUser)
+	})
 
 	// Mount all handlers related to the articles
-	r.Get("/articles", articles.GetArticles)
-	r.Get("/articles/{id}", articles.GetArticle)
-	r.Post("/articles/new", articles.CreateArticle)
-	r.Put("/articles/{id}/edit", articles.EditArticle)
-	r.Delete("/articles/{id}/delete", articles.DeleteArticle)
+	r.Route("/articles", func(r chi.Router) {
+		r.Get("/", articles.GetArticles)
+		r.Get("/{id}", articles.GetArticle)
+		r.Post("/new", articles.CreateArticle)
+		r.Put("/{id}/edit", articles.EditArticle)
+		r.Delete("/{id}/delete", articles.DeleteArticle)
+	})
 
 	// Mount all handlers related to the comments
-	r.Get("/comments", comments.GetComments)
-	r.Get("/comments/article/{id}", comments.GetCommentFromArticle)
-	r.Post("/comments/article/{id}/new", comments.AddComment)
-	r.Delete("/comments/{id}/delete", comments.RemoveComment)
+	r.Route("/comments", func(r chi.Router) {
+		r.Get("/", comments.GetComments)
+		r.Get("/article/{id}", comments.GetCommentFromArticle)
+		r.Post("/article/{id}/new", comments.AddComment)
+		r.Delete("/{id}/delete", comments.RemoveComment)
+	})
 }
