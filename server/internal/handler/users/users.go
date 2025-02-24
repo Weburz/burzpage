@@ -1,12 +1,12 @@
 /*
 Package user provides HTTP handlers for user-related endpoints in a RESTful API.
 
-The key functionalities include:
-  - Logs the incoming request details (method, URL, and user-agent).
-  - Sends a JSON response with a list of users.
-  - Handles error scenarios, including logging errors and responding with internal
-    server errors (500).
-  - Logs success messages with a 200 OK status on successful responses.
+It includes:
+  - Logging of request details (method, URL, user-agent).
+  - Sending a list of users in JSON format.
+  - Error handling and appropriate responses (500).
+  - Logging success messages with 200 OK responses.
+  - User validation and detailed error messages on failure.
 */
 package users
 
@@ -23,19 +23,22 @@ import (
 // Global instance of a validator
 var validate = validator.New()
 
+// ErrorResponse represents the structure of a validation error response.
 type ErrorResponse struct {
 	Errors []ErrorDetail `json:"errors"`
 }
 
+// ErrorDetail represents the details of a single validation error.
 type ErrorDetail struct {
-	Status int         `json:"status"`
-	Source ErrorSource `json:"source"`
-	Title  string      `json:"title"`
-	Detail string      `json:"detail"`
+	Status int         `json:"status"` // The HTTP status code associated with the error
+	Source ErrorSource `json:"source"` // A pointer to the error source
+	Title  string      `json:"title"`  // A brief description of the error
+	Detail string      `json:"detail"` // A detailed explanation of the error
 }
 
+// ErrorSource represents the source of the validation error, usually a field.
 type ErrorSource struct {
-	Pointer string `json:"pointer"`
+	Pointer string `json:"pointer"` // The field pointer
 }
 
 /*
@@ -43,8 +46,8 @@ User represents the structure of a User entity.
 
 Fields:
   - ID: A unique identifier for the user (UUID).
-  - Name: The name of the user.
-  - Email: The email address of the user.
+  - Name: The user's name (at least 2 characters long).
+  - Email: The user's email (valid email format required).
 */
 type User struct {
 	ID    uuid.UUID `json:"id"`
@@ -55,12 +58,12 @@ type User struct {
 /*
 GetUsersHandler handles HTTP GET requests to retrieve a list of users.
 
-The handler performs the following tasks:
+The handler:
  1. Sets the Content-Type header to "application/json".
- 2. Logs the incoming request details including the HTTP method, URL, and user-agent.
- 3. Creates and encodes a list of users into JSON and sends it in the response.
- 4. If JSON encoding fails, returns an internal server error (500).
- 5. Logs a success message and returns a 200 OK status after successful response.
+ 2. Logs request details including method, URL, and user-agent.
+ 3. Creates and sends a list of users in JSON format.
+ 4. Returns a 500 status if JSON encoding fails.
+ 5. Logs a success message and returns a 200 OK status.
 */
 func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 	// Simulate generating a unique user ID for the response
@@ -178,7 +181,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 			errorDetail := ErrorDetail{
 				Status: http.StatusUnprocessableEntity,
 				Source: ErrorSource{
-					Pointer: fmt.Sprintf("/data/attributes/%s", err.Field()),
+					Pointer: "/data/attributes/" + err.Field(),
 				},
 				Title: "Invalid Attribute",
 				Detail: fmt.Sprintf(
