@@ -16,8 +16,27 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 )
+
+// Global instance of a validator
+var validate = validator.New()
+
+type ErrorResponse struct {
+	Errors []ErrorDetail `json:"errors"`
+}
+
+type ErrorDetail struct {
+	Status int         `json:"status"`
+	Source ErrorSource `json:"source"`
+	Title  string      `json:"title"`
+	Detail string      `json:"detail"`
+}
+
+type ErrorSource struct {
+	Pointer string `json:"pointer"`
+}
 
 /*
 User represents the structure of a User entity.
@@ -29,8 +48,8 @@ Fields:
 */
 type User struct {
 	ID    uuid.UUID `json:"id"`
-	Name  string    `json:"name"`
-	Email string    `json:"email"`
+	Name  string    `json:"name"  validate:"required"`
+	Email string    `json:"email" validate:"required,email"`
 }
 
 /*
@@ -150,6 +169,44 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Validate the user struct
+	if err := validate.Struct(updatedUser); err != nil {
+		// Create a custom error response
+		var errorResponse ErrorResponse
+		for _, err := range err.(validator.ValidationErrors) {
+			// Create an error detail based on the validation failure
+			errorDetail := ErrorDetail{
+				Status: http.StatusUnprocessableEntity,
+				Source: ErrorSource{
+					Pointer: fmt.Sprintf("/data/attributes/%s", err.Field()),
+				},
+				Title: "Invalid Attribute",
+				Detail: fmt.Sprintf(
+					"'%s' validation failed for field: '%s'",
+					err.Tag(),
+					err.Field(),
+				),
+			}
+			errorResponse.Errors = append(errorResponse.Errors, errorDetail)
+		}
+
+		// Set Content-Type header to JSON
+		w.Header().Set("Content-Type", "application/vnd.api+json")
+
+		// Set HTTP status code to 422 Unprocessable Entity
+		w.WriteHeader(http.StatusUnprocessableEntity)
+
+		// Return the custom error response in JSON format
+		if err := json.NewEncoder(w).Encode(errorResponse); err != nil {
+			http.Error(
+				w,
+				"Unable to encode error response",
+				http.StatusInternalServerError,
+			)
+		}
+		return
+	}
+
 	// Simulate updating the user (e.g., in a database)
 	// In this example, we just replace the user data for simplicity
 	user := map[string]User{
@@ -161,7 +218,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Set Content-Type header to JSON
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/vnd.api+json")
 
 	// Set HTTP status code to 201 Created
 	w.WriteHeader(http.StatusCreated)
