@@ -18,8 +18,6 @@ Functions:
 package server
 
 import (
-	"net/http"
-
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
@@ -27,11 +25,6 @@ import (
 	"github.com/Weburz/burzcontent/server/internal/handler/comments"
 	"github.com/Weburz/burzcontent/server/internal/handler/users"
 )
-
-// HelloWorld api Handler
-func HelloWorld(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello World!"))
-}
 
 /*
 Server represents the configuration of the HTTP server, including its router
@@ -103,8 +96,7 @@ func (s *Server) MountHandlers() {
 	// Mount all Middleware here
 	r.Use(middleware.Logger)
 
-	// Mount all handlers here
-	r.Get("/", HelloWorld)
+	// Mount all handlers related to users
 	r.Get("/users", users.GetUsersHandler)
 	r.Get("/users/{id}", users.GetUser)
 	r.Post("/users/{id}/edit", users.UpdateUser)

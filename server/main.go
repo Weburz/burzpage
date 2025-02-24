@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/Weburz/burzcontent/server/internal/server"
@@ -30,5 +31,6 @@ the server is stopped.
 func main() {
 	s := server.CreateNewServer()
 	s.MountHandlers()
+	log.Println("Starting the server at [::]:8000")
 	http.ListenAndServe(":8000", s.Router)
 }
