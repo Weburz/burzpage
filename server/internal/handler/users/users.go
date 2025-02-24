@@ -70,7 +70,7 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 	// Simulate generating a unique user ID for the response
 	userID, err := uuid.NewV7()
 	if err != nil {
-		log.Printf("ERROR: %w", err.Error())
+		log.Printf("ERROR: %s", err.Error())
 		http.Error(w, "Unable to Generate User ID", http.StatusInternalServerError)
 		return
 	}

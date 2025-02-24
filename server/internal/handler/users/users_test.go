@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/Weburz/burzcontent/server/internal/testutils"
+	"github.com/google/uuid"
 )
 
 // Define the structure of the expected JSON response
@@ -20,6 +21,9 @@ func TestGetUserHandler(t *testing.T) {
 	// Create the handler and execute the request directly
 	handler := http.HandlerFunc(GetUsers)
 	response := testutils.ExecuteRequest(req, handler)
+
+	// Generate an example User ID for testing purposes ONLY
+	userID, _ := uuid.NewV7()
 
 	// Initialize the test table with appropriate configurations to test with
 	tests := []struct {
@@ -37,12 +41,12 @@ func TestGetUserHandler(t *testing.T) {
 			expectedBody: UserResponse{
 				Users: []User{
 					{
-						ID:    "cb676a46-66fd-4dfb-b839-443f2e6c0b60",
+						ID:    userID,
 						Name:  "Somraj Saha",
 						Email: "somraj.saha@weburz.com",
 					},
 					{
-						ID:    "4f3e23f4-d5d9-4886-90de-f07a93d3c7f5",
+						ID:    userID,
 						Name:  "John Doe",
 						Email: "john.doe@example.com",
 					},

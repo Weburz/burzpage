@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Weburz/burzcontent/server/internal/server"
+	"github.com/Weburz/burzcontent/server/internal/api"
 )
 
 /*
@@ -29,7 +29,7 @@ This main function is the entry point for running the server and does not exit u
 the server is stopped.
 */
 func main() {
-	s := server.CreateNewServer()
+	s := api.CreateNewServer()
 	s.MountHandlers()
 	log.Println("Starting the server at [::]:8000")
 	http.ListenAndServe(":8000", s.Router)

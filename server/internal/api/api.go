@@ -15,7 +15,7 @@ Functions:
   - MountHandlers: Sets up middleware and request handlers for the server, including
     routes and their corresponding logic.
 */
-package server
+package api
 
 import (
 	"github.com/go-chi/chi/v5"
