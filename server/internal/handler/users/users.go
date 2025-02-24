@@ -56,7 +56,7 @@ type User struct {
 }
 
 /*
-GetUsersHandler handles HTTP GET requests to retrieve a list of users.
+GetUsers handles HTTP GET requests to retrieve a list of users.
 
 The handler:
  1. Sets the Content-Type header to "application/json".
@@ -65,7 +65,7 @@ The handler:
  4. Returns a 500 status if JSON encoding fails.
  5. Logs a success message and returns a 200 OK status.
 */
-func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
+func GetUsers(w http.ResponseWriter, r *http.Request) {
 	// Simulate generating a unique user ID for the response
 	userID, err := uuid.NewV7()
 	if err != nil {

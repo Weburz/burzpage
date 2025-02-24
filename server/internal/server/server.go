@@ -97,7 +97,7 @@ func (s *Server) MountHandlers() {
 	r.Use(middleware.Logger)
 
 	// Mount all handlers related to users
-	r.Get("/users", users.GetUsersHandler)
+	r.Get("/users", users.GetUsers)
 	r.Get("/users/{id}", users.GetUser)
 	r.Post("/users/{id}/edit", users.UpdateUser)
 	r.Delete("/users/{id}/delete", users.DeleteUser)

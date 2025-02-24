@@ -18,7 +18,7 @@ func TestGetUserHandler(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/users", nil)
 
 	// Create the handler and execute the request directly
-	handler := http.HandlerFunc(GetUsersHandler)
+	handler := http.HandlerFunc(GetUsers)
 	response := testutils.ExecuteRequest(req, handler)
 
 	// Initialize the test table with appropriate configurations to test with
