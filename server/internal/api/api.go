@@ -18,6 +18,10 @@ Functions:
 package api
 
 import (
+	"errors"
+	"net/http"
+	"time"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
@@ -27,7 +31,7 @@ import (
 )
 
 /*
-Server represents the configuration of the HTTP server, including its router
+API represents the configuration of the HTTP server, including its router
 and other components like database and configuration that could be added later.
 
 Fields:
@@ -41,17 +45,16 @@ Future Enhancements:
 
 Example Usage:
 
-	server := &Server{
+	server := &API{
 		Router: chi.NewRouter(),
 	}
 */
-type Server struct {
+type API struct {
 	Router *chi.Mux
-	// Db, config can be added here
 }
 
 /*
-CreateNewServer initializes a new instance of the Server struct, setting up its router.
+NewAPI initializes a new instance of the Server struct, setting up its router.
 
 The function does the following:
   - Creates a new `Server` instance.
@@ -66,17 +69,20 @@ Returns:
 
 Example Usage:
 
-	server := CreateNewServer()
-	// You can now define routes on the server's router using `server.Router`
+	server := NewAPI()
 */
-func CreateNewServer() *Server {
-	s := &Server{}
-	s.Router = chi.NewRouter()
-	return s
+func NewAPI() *API {
+	router := chi.NewRouter()
+
+	router.Use(middleware.Logger)
+
+	return &API{
+		Router: router,
+	}
 }
 
 /*
-MountHandlers sets up all middleware and routes for the server.
+Run sets up all middleware and routes for the server.
 
 This function is responsible for:
   - Mounting the middleware to be used in the server, such as logging middleware.
@@ -90,8 +96,21 @@ Currently, it mounts the following:
 This function can be expanded in the future to add more middleware or routes to the
 server.
 */
-func (s *Server) MountHandlers() {
-	r := s.Router
+func (a *API) Run() error {
+	srv := http.Server{
+		Addr:         "8000",
+		Handler:      a.Router,
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 30 * time.Second,
+	}
+
+	err := srv.ListenAndServe()
+	if !errors.Is(err, http.ErrServerClosed) {
+		return err
+	}
+
+	r := a.Router
 
 	// Mount all Middleware here
 	r.Use(middleware.Logger)
@@ -120,4 +139,6 @@ func (s *Server) MountHandlers() {
 		r.Post("/article/{id}/new", comments.AddComment)
 		r.Delete("/{id}/delete", comments.RemoveComment)
 	})
+
+	return nil
 }
