@@ -13,6 +13,7 @@ package users
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -69,6 +70,7 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 	// Simulate generating a unique user ID for the response
 	userID, err := uuid.NewV7()
 	if err != nil {
+		log.Printf("ERROR: %w", err.Error())
 		http.Error(w, "Unable to Generate User ID", http.StatusInternalServerError)
 		return
 	}
@@ -92,8 +94,9 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 		"users": users,
 	}
 
-	// Set Content-Type header to JSON
-	w.Header().Set("Content-Type", "application/json")
+	// Set an appropriate header for the response
+	w.Header().Set("Content-Type", "application/vnd.api+json")
+	w.WriteHeader(http.StatusOK)
 
 	// Encode the user data as JSON and send it in the response
 	if err := json.NewEncoder(w).Encode(response); err != nil {
@@ -132,8 +135,9 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 		"user": user,
 	}
 
-	// Set Content-Type header to JSON
+	// Set appropriate headers for the response
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 
 	// Encode the user data and return it as a JSON response
 	if err := json.NewEncoder(w).Encode(response); err != nil {
@@ -220,10 +224,8 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	// Set Content-Type header to JSON
+	// Set an appropriate header for the response
 	w.Header().Set("Content-Type", "application/vnd.api+json")
-
-	// Set HTTP status code to 201 Created
 	w.WriteHeader(http.StatusCreated)
 
 	// Encode the updated user and return it in the response
@@ -261,9 +263,7 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	// Log the deletion
 	fmt.Printf("%q is deleted\n", user)
 
-	// Set Content-Type header to JSON
+	// Set an appropriate header for the response
 	w.Header().Set("Content-Type", "application/json")
-
-	// Set HTTP status code to 204 No Content
 	w.WriteHeader(http.StatusNoContent)
 }
