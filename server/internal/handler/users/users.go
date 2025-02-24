@@ -19,6 +19,8 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
+
+	"github.com/Weburz/burzcontent/server/internal/api/models"
 )
 
 // Global instance of a validator
@@ -43,20 +45,6 @@ type ErrorSource struct {
 }
 
 /*
-User represents the structure of a User entity.
-
-Fields:
-  - ID: A unique identifier for the user (UUID).
-  - Name: The user's name (at least 2 characters long).
-  - Email: The user's email (valid email format required).
-*/
-type User struct {
-	ID    uuid.UUID `json:"id"`
-	Name  string    `json:"name"  validate:"required"`
-	Email string    `json:"email" validate:"required,email"`
-}
-
-/*
 GetUsers handles HTTP GET requests to retrieve a list of users.
 
 The handler:
@@ -76,7 +64,7 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create a list of users to simulate a user database
-	users := []User{
+	users := []models.User{
 		{
 			ID:    userID,
 			Name:  "Somraj Saha",
@@ -90,7 +78,7 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Prepare the response object
-	response := map[string][]User{
+	response := map[string][]models.User{
 		"users": users,
 	}
 
@@ -124,14 +112,14 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Simulate fetching the user from a database
-	user := User{
+	user := models.User{
 		ID:    userID,
 		Name:  "Somraj Saha",
 		Email: "somraj.saha@weburz.com",
 	}
 
 	// Prepare the response object
-	response := map[string]User{
+	response := map[string]models.User{
 		"user": user,
 	}
 
@@ -170,7 +158,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Decode the incoming request body into the User struct
-	var updatedUser User
+	var updatedUser models.User
 	if err := json.NewDecoder(r.Body).Decode(&updatedUser); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
@@ -216,7 +204,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	// Simulate updating the user (e.g., in a database)
 	// In this example, we just replace the user data for simplicity
-	user := map[string]User{
+	user := map[string]models.User{
 		"user": {
 			ID:    userID,
 			Name:  updatedUser.Name,
@@ -254,7 +242,7 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Simulate deleting the user (e.g., from a database)
-	user := User{
+	user := models.User{
 		ID:    userID,
 		Name:  "John Doe",
 		Email: "john.doe@example.com",

@@ -18,23 +18,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
+
+	"github.com/Weburz/burzcontent/server/internal/api/models"
 )
-
-/*
-Comment represents a user comment on an article.
-
-Fields:
-  - ID: The unique identifier for the comment (UUID).
-  - Name: The name of the person who made the comment.
-  - Email: The email address of the person who made the comment.
-  - Content: The text content of the comment.
-*/
-type Comment struct {
-	ID      uuid.UUID `json:"id"`
-	Name    string    `json:"name"`
-	Email   string    `json:"email"`
-	Content string    `json:"content"`
-}
 
 /*
 GetComments handles the HTTP GET request to retrieve a list of all comments.
@@ -53,7 +39,7 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	comments := []Comment{
+	comments := []models.Comment{
 		{
 			ID:      commentID,
 			Name:    "John Doe",
@@ -75,7 +61,7 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create a response object containing the list of comments
-	response := map[string][]Comment{
+	response := map[string][]models.Comment{
 		"comments": comments,
 	}
 
@@ -123,14 +109,14 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-	comment := &Comment{
+	comment := &models.Comment{
 		ID:      commentID,
 		Name:    "Somraj Saha",
 		Content: `This is an experimental comment & it doesn't serve any other purpose`,
 	}
 
 	// Create a response object containing the newly added comment
-	response := map[string]Comment{
+	response := map[string]models.Comment{
 		"comment": *comment,
 	}
 
@@ -163,7 +149,7 @@ func RemoveComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Comment ID Not Found", http.StatusNotFound)
 		return
 	}
-	comment := &Comment{
+	comment := &models.Comment{
 		ID: commentID,
 	}
 

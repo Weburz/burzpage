@@ -17,23 +17,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
+
+	"github.com/Weburz/burzcontent/server/internal/api/models"
 )
-
-/*
-Article represents an article with its associated data.
-
-Fields:
-  - ID: The unique identifier for the article (UUID).
-  - Title: The title of the article.
-  - Author: The author of the article.
-  - Published: A boolean indicating if the article is published.
-*/
-type Article struct {
-	ID        uuid.UUID `json:"id"`
-	Title     string    `json:"title"`
-	Author    string    `json:"author"`
-	Published bool      `json:"published"`
-}
 
 /*
 GetArticles handles the HTTP GET request to retrieve a list of articles.
@@ -54,7 +40,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-	articles := []Article{
+	articles := []models.Article{
 		{
 			ID:        articleID,
 			Title:     "Go Programming Basics",
@@ -76,7 +62,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create response object containing articles
-	response := map[string][]Article{
+	response := map[string][]models.Article{
 		"articles": articles,
 	}
 
@@ -111,7 +97,7 @@ func GetArticle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Simulate fetching the article
-	article := Article{
+	article := models.Article{
 		ID:        articleID,
 		Title:     "Understanding Go Concurrency",
 		Author:    "Alice Johnson",
@@ -119,7 +105,7 @@ func GetArticle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create response object containing the article
-	response := map[string]Article{
+	response := map[string]models.Article{
 		"article": article,
 	}
 
@@ -157,7 +143,7 @@ func CreateArticle(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-	article := Article{
+	article := models.Article{
 		ID:        articleID,
 		Title:     "Learn to Build REST API in Go",
 		Author:    "Somraj Saha",
@@ -165,7 +151,7 @@ func CreateArticle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create response object containing the article
-	response := map[string]Article{
+	response := map[string]models.Article{
 		"article": article,
 	}
 
@@ -201,7 +187,7 @@ func EditArticle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Simulate creating a new article to replace the old one
-	newArticle := Article{
+	newArticle := models.Article{
 		ID:        articleID,
 		Title:     "Learn to Build REST API in Go",
 		Author:    "John Doe",
@@ -209,7 +195,7 @@ func EditArticle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create response object containing the updated article
-	response := map[string]Article{
+	response := map[string]models.Article{
 		"article": newArticle,
 	}
 
@@ -245,7 +231,7 @@ func DeleteArticle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Simulate article deletion
-	article := &Article{
+	article := &models.Article{
 		ID:        articleID,
 		Title:     "Learn to Build REST API in Go",
 		Author:    "John Doe",
