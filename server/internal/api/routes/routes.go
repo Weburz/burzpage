@@ -39,4 +39,13 @@ func SetupRoutes(r *chi.Mux, h *handlers.Handlers) {
 		r.Post("/{id}/edit", h.UserHandler.EditUser)
 		r.Delete("/{id}/delete", h.UserHandler.DeleteUser)
 	})
+
+	// Mount all handlers related to the articles
+	r.Route("/articles", func(r chi.Router) {
+		r.Get("/", h.ArticleHandler.GetArticles)
+		r.Put("/new", h.ArticleHandler.CreateArticle)
+		r.Get("/{id}", h.ArticleHandler.GetArticle)
+		r.Post("/{id}/edit", h.ArticleHandler.EditArticle)
+		r.Delete("/{id}/delete", h.ArticleHandler.DeleteArticle)
+	})
 }

@@ -107,15 +107,6 @@ server.
 func (a *API) Run() error {
 	// r := a.Router
 
-	// Mount all handlers related to the articles
-	r.Route("/articles", func(r chi.Router) {
-		r.Get("/", articles.GetArticles)
-		r.Get("/{id}", articles.GetArticle)
-		r.Post("/new", articles.CreateArticle)
-		r.Put("/{id}/edit", articles.EditArticle)
-		r.Delete("/{id}/delete", articles.DeleteArticle)
-	})
-
 	// Mount all handlers related to the comments
 	r.Route("/comments", func(r chi.Router) {
 		r.Get("/", comments.GetComments)

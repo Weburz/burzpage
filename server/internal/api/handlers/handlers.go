@@ -12,7 +12,8 @@ package handlers
 
 // Handlers holds the handler instances for the various resources in the application.
 type Handlers struct {
-	UserHandler *UserHandler
+	UserHandler    *UserHandler
+	ArticleHandler *ArticleHandler
 }
 
 /*
@@ -28,6 +29,7 @@ for the application, including user-related handlers.
 */
 func NewHandlers() *Handlers {
 	return &Handlers{
-		UserHandler: NewUserHandler(),
+		UserHandler:    NewUserHandler(),
+		ArticleHandler: NewArticleHandler(),
 	}
 }
