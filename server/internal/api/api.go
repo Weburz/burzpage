@@ -26,9 +26,8 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
-	"github.com/Weburz/burzcontent/server/internal/handler/articles"
-	"github.com/Weburz/burzcontent/server/internal/handler/comments"
-	"github.com/Weburz/burzcontent/server/internal/handler/users"
+	"github.com/Weburz/burzcontent/server/internal/api/handlers"
+	"github.com/Weburz/burzcontent/server/internal/api/routes"
 )
 
 /*
@@ -55,28 +54,35 @@ type API struct {
 }
 
 /*
-NewAPI initializes a new instance of the Server struct, setting up its router.
+NewAPI creates a new instance of the API server with the given handlers.
 
-The function does the following:
-  - Creates a new `Server` instance.
-  - Initializes the `Router` field with a new chi.Mux router, which is used for routing
-    HTTP requests.
+This function performs the following steps:
 
-This function provides a convenient way to create a fully configured server instance,
-ready to have routes defined on its router.
+ 1. Initializes a new router using `chi.NewRouter()` for routing HTTP requests.
+ 2. Adds middleware to the router, such as the `Logger` middleware for logging HTTP
+    requests.
+ 3. Sets up the server's routes by calling `routes.SetupRoutes(router, h)`, where the
+    routes are defined based on the provided handlers.
+ 4. Returns a pointer to an `API` instance, which contains the configured router.
 
-Returns:
-- A pointer to a `Server` struct with an initialized `Router` (of type *chi.Mux).
+The returned `API` instance is ready to handle incoming HTTP requests, with the routes
+and middleware set up according to the provided handlers.
 
-Example Usage:
-
-	server := NewAPI()
+Example:
+  - This function can be used to create a new API instance with custom request handlers
+    for various routes.
 */
-func NewAPI() *API {
+func NewAPI(h *handlers.Handlers) *API {
+	// Initialise a new `Router` object
 	router := chi.NewRouter()
 
+	// Register the in-built logger
 	router.Use(middleware.Logger)
 
+	// Setup the routes (aka the API endpoints) to receive HTTP requests on
+	routes.SetupRoutes(router, h)
+
+	// Return an instance of the `API` struct
 	return &API{
 		Router: router,
 	}
