@@ -31,7 +31,12 @@ This function performs the following steps:
 The routes are now ready to process incoming requests related to users.
 */
 func SetupRoutes(r *chi.Mux, h *handlers.Handlers) {
+	// Mount all handlers related to the users
 	r.Route("/users", func(r chi.Router) {
 		r.Get("/", h.UserHandler.GetUsers)
+		r.Put("/new", h.UserHandler.CreateUser)
+		r.Get("/{id}", h.UserHandler.GetUser)
+		r.Post("/{id}/edit", h.UserHandler.EditUser)
+		r.Delete("/{id}/delete", h.UserHandler.DeleteUser)
 	})
 }
