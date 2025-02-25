@@ -1,11 +1,6 @@
 package main
 
-import (
-	"log"
-	"net/http"
-
-	"github.com/Weburz/burzcontent/server/internal/api"
-)
+import "github.com/Weburz/burzcontent/server/internal/api"
 
 /*
 Main is the entry point for the web server application.
@@ -31,6 +26,4 @@ the server is stopped.
 func main() {
 	s := api.NewAPI()
 	s.Run()
-	log.Println("Starting the server at [::]:8000")
-	http.ListenAndServe(":8000", s.Router)
 }

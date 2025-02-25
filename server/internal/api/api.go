@@ -19,6 +19,7 @@ package api
 
 import (
 	"errors"
+	"log"
 	"net/http"
 	"time"
 
@@ -96,24 +97,9 @@ Currently, it mounts the following:
 This function can be expanded in the future to add more middleware or routes to the
 server.
 */
+
 func (a *API) Run() error {
-	srv := http.Server{
-		Addr:         "8000",
-		Handler:      a.Router,
-		IdleTimeout:  time.Minute,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 30 * time.Second,
-	}
-
-	err := srv.ListenAndServe()
-	if !errors.Is(err, http.ErrServerClosed) {
-		return err
-	}
-
 	r := a.Router
-
-	// Mount all Middleware here
-	r.Use(middleware.Logger)
 
 	// Mount all handlers related to users
 	r.Route("/users", func(r chi.Router) {
@@ -139,6 +125,26 @@ func (a *API) Run() error {
 		r.Post("/article/{id}/new", comments.AddComment)
 		r.Delete("/{id}/delete", comments.RemoveComment)
 	})
+
+	// Set up the HTTP server
+	srv := http.Server{
+		// TODO: Remove the hardcoded port number later down the line
+		Addr:         ":8000",
+		Handler:      a.Router,
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 30 * time.Second,
+	}
+
+	// TODO: Remove the hardcoded port number later down the line
+	log.Printf("Starting the server at [::]:%s", "8000")
+
+	// Start the server
+	err := srv.ListenAndServe()
+	if err != nil && !errors.Is(err, http.ErrServerClosed) {
+		log.Fatal("Error starting server: ", err)
+		return err
+	}
 
 	return nil
 }
