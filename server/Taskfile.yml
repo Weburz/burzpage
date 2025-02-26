@@ -21,7 +21,7 @@ tasks:
       - "*.go"
     generates:
       - ./bin/burzcontent
-    cmd: go build -o bin/burzcontent ./cmd/burzcontent
+    cmd: go build -o bin/burzcontent ./cmd
 
   test:
     desc: Run the test suite.
