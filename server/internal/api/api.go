@@ -105,16 +105,6 @@ server.
 */
 
 func (a *API) Run() error {
-	// r := a.Router
-
-	// Mount all handlers related to the comments
-	r.Route("/comments", func(r chi.Router) {
-		r.Get("/", comments.GetComments)
-		r.Get("/article/{id}", comments.GetCommentFromArticle)
-		r.Post("/article/{id}/new", comments.AddComment)
-		r.Delete("/{id}/delete", comments.RemoveComment)
-	})
-
 	// Set up the HTTP server
 	srv := http.Server{
 		// TODO: Remove the hardcoded port number later down the line

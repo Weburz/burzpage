@@ -14,6 +14,7 @@ package handlers
 type Handlers struct {
 	UserHandler    *UserHandler
 	ArticleHandler *ArticleHandler
+	CommentHandler *CommentHandler
 }
 
 /*
@@ -31,5 +32,6 @@ func NewHandlers() *Handlers {
 	return &Handlers{
 		UserHandler:    NewUserHandler(),
 		ArticleHandler: NewArticleHandler(),
+		CommentHandler: NewCommentHandler(),
 	}
 }

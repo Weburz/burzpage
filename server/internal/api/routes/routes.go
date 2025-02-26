@@ -48,4 +48,12 @@ func SetupRoutes(r *chi.Mux, h *handlers.Handlers) {
 		r.Post("/{id}/edit", h.ArticleHandler.EditArticle)
 		r.Delete("/{id}/delete", h.ArticleHandler.DeleteArticle)
 	})
+
+	// Mount all handlers related to the comments
+	r.Route("/comments", func(r chi.Router) {
+		r.Get("/", h.CommentHandler.GetComments)
+		r.Get("/article/{id}", h.CommentHandler.GetCommentsFromArticle)
+		r.Post("/article/{id}/new", h.CommentHandler.AddComment)
+		r.Delete("/{id}/delete", h.CommentHandler.RemoveComment)
+	})
 }
