@@ -10,8 +10,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -19,10 +17,13 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/Weburz/burzcontent/server/internal/api/models"
+	"github.com/Weburz/burzcontent/server/internal/api/services"
 )
 
 // UserHandler handles HTTP requests related to users, including retrieving user data.
-type UserHandler struct{}
+type UserHandler struct {
+	UserService services.UserService
+}
 
 /*
 NewUserHandler creates and initializes a new instance of UserHandler.
@@ -30,12 +31,14 @@ NewUserHandler creates and initializes a new instance of UserHandler.
 This function returns a new `UserHandler` instance, which is ready to handle
 user-related HTTP requests.
 */
-func NewUserHandler() *UserHandler {
-	return &UserHandler{}
+func NewUserHandler(userService services.UserService) *UserHandler {
+	return &UserHandler{
+		UserService: userService,
+	}
 }
 
 /*
-GetUsers handles HTTP requests to retrieve a list of users.
+GetAllUsers handles HTTP requests to retrieve a list of users.
 
 This function performs the following steps:
 
@@ -51,25 +54,10 @@ This function performs the following steps:
 The response will contain a JSON array of users, each represented by their ID,
 name, and email address.
 */
-func (ur *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
-	userID, err := uuid.NewV7()
+func (ur *UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	users, err := ur.UserService.GetAllUsers()
 	if err != nil {
-		log.Printf("ERROR: %s", err.Error())
-		http.Error(w, "Unable to Generate User ID", http.StatusInternalServerError)
-		return
-	}
-
-	users := []models.User{
-		{
-			ID:    userID,
-			Name:  "Somraj Saha",
-			Email: "somraj.saha@weburz.com",
-		},
-		{
-			ID:    userID,
-			Name:  "John Doe",
-			Email: "john.doe@weburz.com",
-		},
+		http.Error(w, "Unable to fetch users", http.StatusInternalServerError)
 	}
 
 	response := map[string][]models.User{
@@ -87,7 +75,7 @@ func (ur *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 /*
-GetUser handles HTTP requests to retrieve a user's information by their ID.
+GetUserByID handles HTTP requests to retrieve a user's information by their ID.
 
 This function performs the following steps:
 
@@ -113,17 +101,17 @@ Error Handling:
 Note: The user retrieval process in this function is mocked; no actual user data is
 fetched from a database or persistent storage.
 */
-func (ur *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
+func (ur *UserHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	userID, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
-		http.Error(w, "User ID Not Found", http.StatusNotFound)
+		http.Error(w, "Invalid User ID", http.StatusBadRequest)
 		return
 	}
 
-	user := models.User{
-		ID:    userID,
-		Name:  "Somraj Saha",
-		Email: "somraj.saha@weburz.com",
+	user, err := ur.UserService.GetUserByID(userID)
+	if err != nil {
+		http.Error(w, "Unable to fetch user data", http.StatusInternalServerError)
+		return
 	}
 
 	response := map[string]models.User{
@@ -140,7 +128,7 @@ func (ur *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 }
 
 /*
-EditUser handles HTTP requests to update an existing user's information.
+UpdateUser handles HTTP requests to update an existing user's information.
 
 This function performs the following steps:
 
@@ -175,12 +163,12 @@ Error Handling:
 Note: The user update process in this function is mocked; no actual user data is stored
 in a database or persistent storage.
 */
-func (ur *UserHandler) EditUser(w http.ResponseWriter, r *http.Request) {
+func (ur *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	validate := validator.New()
 
 	userID, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
-		http.Error(w, "User ID Not Found", http.StatusNotFound)
+		http.Error(w, "Invalid User ID", http.StatusBadRequest)
 		return
 	}
 
@@ -196,14 +184,14 @@ func (ur *UserHandler) EditUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := &models.User{
-		ID:    userID,
-		Name:  updatedUser.Name,
-		Email: updatedUser.Email,
+	user, err := ur.UserService.UpdateUser(userID, updatedUser.Name, updatedUser.Email)
+	if err != nil {
+		http.Error(w, "Unable to process user data", http.StatusInternalServerError)
+		return
 	}
 
 	response := map[string]models.User{
-		"user": *user,
+		"user": user,
 	}
 
 	w.Header().Set("Content-Type", "application/vnd.api+json")
@@ -261,18 +249,14 @@ func (ur *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, err := uuid.NewV7()
+	user, err := ur.UserService.CreateUser(newUser.Name, newUser.Email)
 	if err != nil {
-		http.Error(w, "Failed to generate a User ID", http.StatusInternalServerError)
-	}
-	user := &models.User{
-		ID:    userID,
-		Name:  newUser.Name,
-		Email: newUser.Email,
+		http.Error(w, "Unable to process user data", http.StatusInternalServerError)
+		return
 	}
 
 	response := map[string]models.User{
-		"user": *user,
+		"user": user,
 	}
 
 	w.Header().Set("Content-Type", "application/vnd.api+json")
@@ -307,13 +291,11 @@ func (ur *UserHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "User ID Not Found", http.StatusNotFound)
 	}
 
-	user := models.User{
-		ID:    userID,
-		Name:  "John Doe",
-		Email: "john.doe@weburz.com",
+	err = ur.UserService.DeleteUser(userID)
+	if err != nil {
+		http.Error(w, "Unable to delete user data", http.StatusInternalServerError)
+		return
 	}
-
-	fmt.Printf("%q is deleted!\n", user)
 
 	w.Header().Set("Content-Type", "application/vnd.api+json")
 	w.WriteHeader(http.StatusNoContent)

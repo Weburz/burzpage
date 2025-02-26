@@ -10,6 +10,8 @@ and process requests routed to different endpoints.
 */
 package handlers
 
+import "github.com/Weburz/burzcontent/server/internal/api/services"
+
 // Handlers holds the handler instances for the various resources in the application.
 type Handlers struct {
 	UserHandler    *UserHandler
@@ -29,8 +31,10 @@ This function provides an easy way to initialize all the handlers needed
 for the application, including user-related handlers.
 */
 func NewHandlers() *Handlers {
+	userService := services.NewUserService()
+
 	return &Handlers{
-		UserHandler:    NewUserHandler(),
+		UserHandler:    NewUserHandler(userService),
 		ArticleHandler: NewArticleHandler(),
 		CommentHandler: NewCommentHandler(),
 	}
