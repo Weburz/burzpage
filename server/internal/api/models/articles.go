@@ -20,8 +20,8 @@ Fields:
   - Published: A boolean indicating if the article is published.
 */
 type Article struct {
-	ID        uuid.UUID `json:"id"`
-	Title     string    `json:"title"`
-	Author    string    `json:"author"`
-	Published bool      `json:"published"`
+	ID          uuid.UUID `json:"id"`
+	Title       string    `json:"title"`
+	Author      string    `json:"author"`
+	IsPublished bool      `json:"isPublished"`
 }

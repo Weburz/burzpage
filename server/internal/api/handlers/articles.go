@@ -24,6 +24,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/Weburz/burzcontent/server/internal/api/models"
+	"github.com/Weburz/burzcontent/server/internal/api/services"
 )
 
 /*
@@ -44,7 +45,9 @@ The `ArticleHandler` struct does not store any state itself but relies on
 external services, such as models and validators, to handle article data
 and validation.
 */
-type ArticleHandler struct{}
+type ArticleHandler struct {
+	ArticleServer services.ArticleService
+}
 
 /*
 NewArticleHandler creates and returns a new instance of ArticleHandler.
@@ -59,12 +62,14 @@ Returns:
 Example:
   - Call `NewArticleHandler()` to create a new `ArticleHandler` instance.
 */
-func NewArticleHandler() *ArticleHandler {
-	return &ArticleHandler{}
+func NewArticleHandler(articleService services.ArticleService) *ArticleHandler {
+	return &ArticleHandler{
+		ArticleServer: articleService,
+	}
 }
 
 /*
-GetArticles handles the retrieval of all articles.
+GetAllArticles handles the retrieval of all articles.
 
 This function performs the following actions:
 
@@ -121,36 +126,11 @@ Example:
   - Request: GET /articles
   - Response: HTTP 200 OK with a JSON body containing a list of articles.
 */
-func (ar *ArticleHandler) GetArticles(w http.ResponseWriter, r *http.Request) {
-	articleID, err := uuid.NewV7()
+func (ar *ArticleHandler) GetAllArticles(w http.ResponseWriter, r *http.Request) {
+	articles, err := ar.ArticleServer.GetAllArticles()
 	if err != nil {
-		http.Error(
-			w,
-			"Unable to generate the Article ID",
-			http.StatusInternalServerError,
-		)
+		http.Error(w, "Failed to fetch all articles", http.StatusInternalServerError)
 		return
-	}
-
-	articles := []models.Article{
-		{
-			ID:        articleID,
-			Title:     "Go Programming Basics",
-			Author:    "John Doe",
-			Published: true,
-		},
-		{
-			ID:        articleID,
-			Title:     "Advanced Go Techniques",
-			Author:    "Jane Smith",
-			Published: false,
-		},
-		{
-			ID:        articleID,
-			Title:     "Understanding Go Concurrency",
-			Author:    "Alice Johnson",
-			Published: true,
-		},
 	}
 
 	response := map[string][]models.Article{
@@ -168,7 +148,7 @@ func (ar *ArticleHandler) GetArticles(w http.ResponseWriter, r *http.Request) {
 }
 
 /*
-GetArticle handles the retrieval of a single article by its ID.
+GetArticleByID handles the retrieval of a single article by its ID.
 
 This function performs the following actions:
 
@@ -209,18 +189,17 @@ Example:
   - Request: GET /articles/{id}
   - Response: HTTP 200 OK with a JSON body containing the requested article.
 */
-func (ar *ArticleHandler) GetArticle(w http.ResponseWriter, r *http.Request) {
+func (ar *ArticleHandler) GetArticleByID(w http.ResponseWriter, r *http.Request) {
 	articleID, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		http.Error(w, "Article ID Not Found", http.StatusNotFound)
 		return
 	}
 
-	article := models.Article{
-		ID:        articleID,
-		Title:     "Go Programmign Basics",
-		Author:    "John Doe",
-		Published: true,
+	article, err := ar.ArticleServer.GetArticleByID(articleID)
+	if err != nil {
+		http.Error(w, "Article Not Found", http.StatusNotFound)
+		return
 	}
 
 	response := map[string]models.Article{
@@ -305,25 +284,18 @@ func (ar *ArticleHandler) CreateArticle(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	articleID, err := uuid.NewV7()
+	article, err := ar.ArticleServer.CreateArticle(
+		newArticle.Title,
+		newArticle.Author,
+		newArticle.IsPublished,
+	)
 	if err != nil {
-		http.Error(
-			w,
-			"Failed to generate the Article ID",
-			http.StatusInternalServerError,
-		)
+		http.Error(w, "Failed to create article", http.StatusInternalServerError)
 		return
 	}
 
-	article := &models.Article{
-		ID:        articleID,
-		Title:     newArticle.Title,
-		Author:    newArticle.Author,
-		Published: false,
-	}
-
 	response := map[string]models.Article{
-		"article": *article,
+		"article": article,
 	}
 
 	w.Header().Set("Content-Type", "application/vnd.api+json")
@@ -337,7 +309,7 @@ func (ar *ArticleHandler) CreateArticle(w http.ResponseWriter, r *http.Request) 
 }
 
 /*
-EditArticle handles the updating of an existing article.
+UpdateArticle handles the updating of an existing article.
 
 This function performs the following actions:
 
@@ -376,7 +348,7 @@ Example:
   - Request Body: JSON object with updated title, author, and publication status.
   - Response: HTTP 201 Created with a JSON body containing the updated article.
 */
-func (ar *ArticleHandler) EditArticle(w http.ResponseWriter, r *http.Request) {
+func (ar *ArticleHandler) UpdateArticle(w http.ResponseWriter, r *http.Request) {
 	var updatedArticle models.Article
 	validate := validator.New()
 	if err := validate.Struct(updatedArticle); err != nil {
@@ -396,11 +368,15 @@ func (ar *ArticleHandler) EditArticle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	article := models.Article{
-		ID:        articleID,
-		Title:     updatedArticle.Title,
-		Author:    updatedArticle.Author,
-		Published: updatedArticle.Published,
+	article, err := ar.ArticleServer.UpdateArticle(
+		articleID,
+		updatedArticle.Title,
+		updatedArticle.Author,
+		updatedArticle.IsPublished,
+	)
+	if err != nil {
+		http.Error(w, "Unable to update article", http.StatusBadRequest)
+		return
 	}
 
 	response := map[string]models.Article{
@@ -437,9 +413,14 @@ Example:
   - Response: HTTP 204 No Content, indicating successful deletion.
 */
 func (ar *ArticleHandler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
-	_, err := uuid.Parse(chi.URLParam(r, "id"))
+	articleID, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		http.Error(w, "Article ID Not Found", http.StatusNotFound)
+		return
+	}
+
+	if err = ar.ArticleServer.DeleteArticle(articleID); err != nil {
+		http.Error(w, "Failed to delete article", http.StatusBadRequest)
 		return
 	}
 
