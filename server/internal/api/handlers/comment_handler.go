@@ -1,3 +1,19 @@
+/*
+Package handlers provides HTTP handlers for managing comments in the system.
+
+This package includes various handler functions related to comment management,
+including:
+  - Retrieving all comments (`GetComments`)
+  - Adding a new comment (`AddComment`)
+  - Removing an existing comment (`RemoveComment`)
+  - (Planned) Retrieving comments for a specific article (`GetCommentsFromArticle`)
+
+The `CommentHandler` struct defines methods that handle HTTP requests related to
+comments.
+
+The package interacts with the `models` package for defining comment structures and
+validation.
+*/
 package handlers
 
 import (
@@ -11,13 +27,16 @@ import (
 	"github.com/google/uuid"
 )
 
+// CommentHandler handles HTTP requests related to comments.
 type CommentHandler struct{}
 
+// NewCommentHandler creates and returns a new instance of CommentHandler.
 func NewCommentHandler() *CommentHandler {
 	return &CommentHandler{}
 }
 
-/* GetComments will fetch all comments available on the system. */
+// GetComments will fetch all comments available on the system.
+// It returns a list of comments in JSON format.
 func (cr *CommentHandler) GetComments(w http.ResponseWriter, r *http.Request) {
 	commentID, err := uuid.NewV7()
 	if err != nil {
@@ -66,14 +85,18 @@ func (cr *CommentHandler) GetComments(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-/* GetCommentsFromArticle will fetch all comments from an article (by ID). */
+// GetCommentsFromArticle will fetch all comments for a specific article.
+// This method currently has no implementation.
 func (cr *CommentHandler) GetCommentsFromArticle(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
+	// TODO: Implement functionality to fetch comments by article ID
 }
 
-/* AddComment will add a new comment to an article (by ID). */
+// AddComment will add a new comment to an article.
+// It accepts a comment in the request body, validates it, and adds it to the system.
+// Returns the created comment in the response.
 func (cr *CommentHandler) AddComment(w http.ResponseWriter, r *http.Request) {
 	// Unmarshal the request into a struct for processing
 	var newComment models.Comment
@@ -126,7 +149,9 @@ func (cr *CommentHandler) AddComment(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-/* RemoveComment will remove a comment from an article (by ID). */
+// RemoveComment will remove a comment from the system by its ID.
+// It expects the comment ID as a URL parameter and returns a successful response if
+// the comment is deleted.
 func (cr *CommentHandler) RemoveComment(w http.ResponseWriter, r *http.Request) {
 	commentID, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
@@ -136,8 +161,10 @@ func (cr *CommentHandler) RemoveComment(w http.ResponseWriter, r *http.Request) 
 
 	comment := models.Comment{ID: commentID}
 
+	// Log the deletion (this would be replaced by actual deletion logic)
 	fmt.Printf("%q is deleted!\n", comment)
 
+	// Set HTTP response headers and status code for a successful deletion
 	w.Header().Set("Content-Type", "application/vnd.api+json")
 	w.WriteHeader(http.StatusNoContent)
 }
