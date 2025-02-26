@@ -21,10 +21,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Weburz/burzcontent/server/internal/api/models"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-playground/validator/v10"
+	chi "github.com/go-chi/chi/v5"
+	validator "github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
+
+	"github.com/Weburz/burzcontent/server/internal/api/models"
 )
 
 // CommentHandler handles HTTP requests related to comments.
