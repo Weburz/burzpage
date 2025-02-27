@@ -18,119 +18,185 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
-	chi "github.com/go-chi/chi/v5"
 	validator "github.com/go-playground/validator/v10"
-	"github.com/google/uuid"
 
 	"github.com/Weburz/burzcontent/server/internal/api/models"
+	"github.com/Weburz/burzcontent/server/internal/api/services"
 )
 
-// CommentHandler handles HTTP requests related to comments.
-type CommentHandler struct{}
+/*
+CommentHandler is a struct that handles HTTP requests related to comments.
 
-// NewCommentHandler creates and returns a new instance of CommentHandler.
-func NewCommentHandler() *CommentHandler {
-	return &CommentHandler{}
+This struct holds a reference to the CommentService, which is used to perform operations
+such as adding, retrieving, and deleting comments. It acts as a controller in an MVC
+architecture, handling requests from the client and delegating comment-related logic to
+the CommentService.
+
+Fields:
+
+	CommentService (services.CommentService): A service for managing comments.
+*/
+type CommentHandler struct {
+	CommentService services.CommentService
 }
 
-// GetComments will fetch all comments available on the system.
-// It returns a list of comments in JSON format.
-func (cr *CommentHandler) GetComments(w http.ResponseWriter, r *http.Request) {
-	commentID, err := uuid.NewV7()
+/*
+NewCommentHandler creates and returns a new instance of CommentHandler.
+
+This function initializes a new CommentHandler object, providing it with the given
+CommentService to handle comment-related operations. It serves as a constructor for the
+CommentHandler type.
+
+Parameters:
+
+	commentService (services.CommentService): The service to be used for comment
+	    operations.
+
+Returns:
+
+	*CommentHandler: A pointer to a newly created CommentHandler instance.
+*/
+func NewCommentHandler(commentService services.CommentService) *CommentHandler {
+	return &CommentHandler{
+		CommentService: commentService,
+	}
+}
+
+/*
+GetAllComments handles HTTP requests to retrieve all comments for an article.
+
+This method interacts with the CommentService to fetch all comments. If successful,
+it returns the comments in a JSON format with a "comments" key. If any error occurs
+while retrieving the comments or encoding the response, it returns an appropriate
+error message with an HTTP status code of 500 (Internal Server Error).
+
+Parameters:
+
+	w (http.ResponseWriter): The HTTP response writer used to send the response.
+	r (*http.Request): The HTTP request containing information about the request.
+
+Returns:
+
+	None: Writes the response directly to the HTTP client.
+
+HTTP Status Codes:
+  - 200 (OK): If the comments are successfully retrieved and returned.
+  - 500 (Internal Server Error): If there is an error while retrieving comments
+    or encoding the response.
+*/
+func (cr *CommentHandler) GetAllComments(w http.ResponseWriter, r *http.Request) {
+	comments, err := cr.CommentService.GetAllComments()
 	if err != nil {
-		http.Error(w, "Comment ID Not Found", http.StatusNotFound)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	comments := []models.Comment{
-		{
-			ID:      commentID,
-			Name:    "John Doe",
-			Email:   "john.doe@example.com",
-			Content: "This is a great article",
-		},
-		{
-			ID:      commentID,
-			Name:    "Jane Smith",
-			Email:   "jane.smith@example.com",
-			Content: "I found this article really helpful, thanks!",
-		},
-		{
-			ID:      commentID,
-			Name:    "Alice Johnson",
-			Email:   "alice.johnson@example.com",
-			Content: "Interesting perspective, I learned a lot!",
-		},
-		{
-			ID:      commentID,
-			Name:    "Somraj Saha",
-			Email:   "somraj.saha@weburz.com",
-			Content: "This is a test comment for experimental purposes ONLY!",
-		},
-	}
-
-	response := map[string][]models.Comment{
-		"comments": comments,
-	}
+	response := map[string][]models.Comment{"comments": comments}
 
 	w.Header().Set("Content-Type", "application/vnd.api+json")
 	w.WriteHeader(http.StatusOK)
 
 	encoder := json.NewEncoder(w)
 	if err := encoder.Encode(response); err != nil {
-		http.Error(w, "Unable to encode JSON", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
 
-// GetCommentsFromArticle will fetch all comments for a specific article.
-// This method currently has no implementation.
+/*
+GetCommentsFromArticle handles HTTP requests to retrieve comments from a specific
+article.
+
+This method interacts with the CommentService to fetch the comments associated with
+an article. If successful, it returns the comments in a JSON format with a "comments"
+key. If any error occurs while retrieving the comments or encoding the response,
+it returns an appropriate error message with an HTTP status code of 500 (Internal
+Server Error).
+
+Parameters:
+
+	w (http.ResponseWriter): The HTTP response writer used to send the response.
+	r (*http.Request): The HTTP request containing information about the request.
+
+Returns:
+
+	None: Writes the response directly to the HTTP client.
+
+HTTP Status Codes:
+  - 200 (OK): If the comments are successfully retrieved and returned.
+  - 500 (Internal Server Error): If there is an error while retrieving comments
+    or encoding the response.
+*/
 func (cr *CommentHandler) GetCommentsFromArticle(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	// TODO: Implement functionality to fetch comments by article ID
+	comments, err := cr.CommentService.GetCommentsFromArticle()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	response := map[string][]models.Comment{"comments": comments}
+
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(response); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
-// AddComment will add a new comment to an article.
-// It accepts a comment in the request body, validates it, and adds it to the system.
-// Returns the created comment in the response.
-func (cr *CommentHandler) AddComment(w http.ResponseWriter, r *http.Request) {
-	// Unmarshal the request into a struct for processing
+/*
+AddCommentToArticle handles HTTP requests to add a new comment to an article.
+
+This method receives a new comment in JSON format, validates it, and then uses
+the CommentService to add the comment. If the comment is successfully added,
+it returns the newly created comment in a JSON format with a "comment" key.
+If any error occurs during the process, it returns an appropriate error message
+with the corresponding HTTP status code.
+
+Parameters:
+
+	w (http.ResponseWriter): The HTTP response writer used to send the response.
+	r (*http.Request): The HTTP request containing the comment data.
+
+Returns:
+
+	None: Writes the response directly to the HTTP client.
+
+HTTP Status Codes:
+  - 201 (Created): If the comment is successfully added.
+  - 400 (Bad Request): If there is an error decoding the request body.
+  - 422 (Unprocessable Entity): If the comment fails validation.
+  - 500 (Internal Server Error): If there is an error while adding the comment
+    or encoding the response.
+*/
+func (cr *CommentHandler) AddCommentToArticle(w http.ResponseWriter, r *http.Request) {
 	var newComment models.Comment
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&newComment); err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	// Validate the request body
 	validate := validator.New()
 	if err := validate.Struct(newComment); err != nil {
-		http.Error(w, "Request body validation failed", http.StatusUnprocessableEntity)
-		return
-	}
-
-	// Generate an unique identifier for the comment
-	commentID, err := uuid.NewV7()
-	if err != nil {
-		http.Error(
-			w,
-			"Unable to generate the Comment ID",
-			http.StatusInternalServerError,
-		)
+		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
 		return
 	}
 
 	// Create a comment instance
-	comment := &models.Comment{
-		ID:      commentID,
-		Name:    newComment.Name,
-		Email:   newComment.Email,
-		Content: newComment.Content,
+	comment, err := cr.CommentService.AddCommentToArticle(
+		newComment.Name,
+		newComment.Email,
+		newComment.Content,
+	)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	// Create a response to encode and send to the client
@@ -150,22 +216,36 @@ func (cr *CommentHandler) AddComment(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// RemoveComment will remove a comment from the system by its ID.
-// It expects the comment ID as a URL parameter and returns a successful response if
-// the comment is deleted.
-func (cr *CommentHandler) RemoveComment(w http.ResponseWriter, r *http.Request) {
-	commentID, err := uuid.Parse(chi.URLParam(r, "id"))
-	if err != nil {
-		http.Error(w, "Comment ID Not Found", http.StatusNotFound)
+/*
+DeleteCommentFromArticle handles HTTP requests to delete a comment from an article.
+
+This method interacts with the CommentService to delete a comment. If the deletion
+is successful, it returns an HTTP status code of 204 (No Content). If there is any
+error while deleting the comment, it returns an appropriate error message with a
+status code of 500 (Internal Server Error).
+
+Parameters:
+
+	w (http.ResponseWriter): The HTTP response writer used to send the response.
+	r (*http.Request): The HTTP request containing information about the request.
+
+Returns:
+
+	None: Writes the response directly to the HTTP client.
+
+HTTP Status Codes:
+  - 204 (No Content): If the comment is successfully deleted.
+  - 500 (Internal Server Error): If there is an error while deleting the comment.
+*/
+func (cr *CommentHandler) DeleteCommentFromArticle(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	if err := cr.CommentService.DeleteCommentFromArticle(); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	comment := models.Comment{ID: commentID}
-
-	// Log the deletion (this would be replaced by actual deletion logic)
-	fmt.Printf("%q is deleted!\n", comment)
-
-	// Set HTTP response headers and status code for a successful deletion
 	w.Header().Set("Content-Type", "application/vnd.api+json")
 	w.WriteHeader(http.StatusNoContent)
 }

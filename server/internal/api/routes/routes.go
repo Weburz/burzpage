@@ -51,9 +51,9 @@ func SetupRoutes(r *chi.Mux, h *handlers.Handlers) {
 
 	// Mount all handlers related to the comments
 	r.Route("/comments", func(r chi.Router) {
-		r.Get("/", h.CommentHandler.GetComments)
+		r.Get("/", h.CommentHandler.GetAllComments)
 		r.Get("/article/{id}", h.CommentHandler.GetCommentsFromArticle)
-		r.Post("/article/{id}/new", h.CommentHandler.AddComment)
-		r.Delete("/{id}/delete", h.CommentHandler.RemoveComment)
+		r.Post("/article/{id}/new", h.CommentHandler.AddCommentToArticle)
+		r.Delete("/{id}/delete", h.CommentHandler.DeleteCommentFromArticle)
 	})
 }

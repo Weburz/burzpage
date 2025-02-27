@@ -33,10 +33,11 @@ for the application, including user-related handlers.
 func NewHandlers() *Handlers {
 	userService := services.NewUserService()
 	articleService := services.NewArticleService()
+	commentService := services.NewCommentService()
 
 	return &Handlers{
 		UserHandler:    NewUserHandler(userService),
 		ArticleHandler: NewArticleHandler(articleService),
-		CommentHandler: NewCommentHandler(),
+		CommentHandler: NewCommentHandler(commentService),
 	}
 }
