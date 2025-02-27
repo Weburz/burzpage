@@ -18,7 +18,7 @@ tasks:
       This command will build the executable binary after compiling the Go
       source code.
     sources:
-      - "*.go"
+      - "**/*.go"
     generates:
       - ./bin/burzcontent
     cmd: go build -o bin/burzcontent ./cmd
