@@ -7,7 +7,7 @@ developer reference (and for those interested in studying the tool for personal
 fulfillment). The document will walk you through the the underlying architecture
 of the system and then the relationships between the entities of the system.
 
-## System Architecture
+## System Architecture & Service Integration Design
 
 The entire system is powered by multiple services each working in tandem and
 communicating with each other through REST API endpoints. The architectural
@@ -19,7 +19,7 @@ diagram below:
 
 ```mermaid
 ---
-title: BurzContent's Architecture
+title: BurzContent System Architecture
 ---
 sequenceDiagram
     autonumber
@@ -58,7 +58,20 @@ If you have familiarised yourself with the overall system architectural designs
 of the system you should proceed towards learning about the entities of involved
 within the system.
 
-## An Overview of the Entities
+As is evident from the diagram provided above, the system has the following core
+services:
+
+1. The "**server**" responsible for receiving and handling HTTP requests from
+   clients (could be the CMS or a blog).
+2. The "**client(s)**" are responsible for providing an interactive platform to
+   the users/readers.
+3. The "**database**" is responsible for storage purposes only which is
+   accessible only through the "**server**".
+
+More details on the implementations of the aforementioned services are provided
+in a later section of the document.
+
+## Structure of Key Entities in the System
 
 The system consists of three primary entities:
 
@@ -126,8 +139,6 @@ The key relationships between the entities can be summarised as:
   each article has one author.
 - **Article to Comment (One-to-Many):** An article can have multiple comments,
   but each comment belongs to one specific article.
-
-## A Detailed Reference of the Entities
 
 As mentioned earlier the platform consists of these entities are - "**Users**",
 "**Articles**" and "**Comments**" each interacting with one another in certain
@@ -325,3 +336,12 @@ erDiagram
         Content VARCHAR(3000) "The actual contents of the comment."
     }
 ```
+
+## Implementation Details
+
+<!-- TODO: Discuss in details how the services are implemented. -->
+<!-- INFO: https://www.calhoun.io/using-mvc-to-structure-go-web-applications -->
+
+### The "Server" Service
+
+### The "Content Management Service (CMS)" Service
