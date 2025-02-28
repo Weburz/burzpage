@@ -337,11 +337,180 @@ erDiagram
     }
 ```
 
-## Implementation Details
+## Implementation and Structuring Details
 
-<!-- TODO: Discuss in details how the services are implemented. -->
-<!-- INFO: https://www.calhoun.io/using-mvc-to-structure-go-web-applications -->
+As previously mentioned, the system includes the following pre-configured
+services:
 
-### The "Server" Service
+- **Server**: This is the server-side component.
+- **Content Management System (CMS)**: This is the client-side application.
 
-### The "Content Management Service (CMS)" Service
+The CMS is the primary web interface available to end users, allowing them to
+manage their blog posts and related content. It interacts with the server-side
+service (the **Server**) via REST APIs to handle persistent data storage and
+platform management tasks (such as adding users). The server-side service also
+exposes several public REST API endpoints, which can be accessed by third-party
+blogs.
+
+The project follows the
+[**Model-View-Controller (MVC)**](https://developer.mozilla.org/en-US/docs/Glossary/MVC)
+design pattern, which simplifies source code organization and maintenance. The
+structure of the project's source code is organized as follows:
+
+**Project Root Directory**:
+
+```console
+.
+├── .github/
+│   └── ...
+├── assets/
+│   └── ...
+├── docs/
+│   └── ...
+├── server/
+│   └── ...
+├── cms/
+│   └── ...
+├── ...
+├── README
+└── LICENSE
+```
+
+The representation above shows the structure at the root of the project's
+repository. While it's fairly self-explanatory, here's a brief overview of each
+directory and its purpose:
+
+1. The `.github` directory contains GitHub Action workflows, Dependabot
+   configurations, and other related files.
+2. The `assets` directory holds logos, screenshots, and other media files.
+3. The `docs` directory contains the Starlight source code for this
+   documentation site (the one you're currently reading).
+4. The `server` directory holds the Go source code responsible for powering the
+   server-side service of BurzContent.
+5. The `cms` directory contains the interactive web application that allows
+   users to manage their blogs.
+6. The remaining files include the `README`, `LICENSE`, and other essential
+   documents.
+
+**On the Server-Side**:
+
+```console
+.
+├── ...
+├── handlers/
+│   └── ...
+├── models/
+│   └── ...
+├── services/
+│   └── ...
+└── ...
+```
+
+In accordance with common practices among other Go projects, the directories in
+the source code have been named based on the context they serve. For example,
+the `handlers` directory contains the logic for receiving HTTP traffic from the
+client-side services (or applications). Similarly, the `models` and `services`
+directories contain the logic for querying data from a persistent storage medium
+and the logic for serving that data to a handler, respectively.
+
+Retrospectively, the structure described above can be mapped to the following
+MVC pattern, which is commonly used in other programming languages:
+
+- The `models` directory can be considered the "**Model**" part of the pattern.
+- The `handlers` directory can be considered the "**View**" part of the pattern.
+- The `services` directory can be considered the "**Controller**" part of the
+  pattern.
+
+<!-- prettier-ignore-start -->
+:::note
+The project structure outlined above is intended as a **guideline only**, and
+the organization of the source code may change over time.
+:::
+<!-- prettier-ignore-end -->
+
+Additionally, the server-side service uses the
+"[Dependency Injection](https://www.jetbrains.com/guide/go/tutorials/dependency_injection_part_one)"
+technique, which is a key recommendation in the MVC design pattern for writing
+maintainable software. Components of the system are initialized with their
+dependencies injected during instantiation. Below is an example Go source code
+that demonstrates this technique:
+
+```go
+package main
+
+type UserService interface {
+    // ... all the methods to be supported by the "user service" type
+}
+
+type UserServiceImpl struct {
+    // ... create a struct of the "user service" to instantiate with
+}
+
+// Instantiate a new instance of the "user service" type
+func NewUserService() *UserServiceImpl {
+    return &UserServiceImpl{
+        // ...
+    }
+}
+
+func (us *UserServiceImpl) GetAllUsers() ([]Users, error) {
+    // ... Implement a method on the "user service" type
+}
+
+// Create a struct which embeds a "UserService" struct
+type UserHandler struct {
+	UserService UserService
+}
+
+// Inject the "UserService" dependency when instantiating the "UserHandler"
+// struct
+func NewUserHandler(userService UserService) *UserHandler {
+    return &UserHandler{
+        UserService: userService
+    }
+}
+
+func (us *UserServiceHandler) GetAllUsers() ([]Users, error) {
+    // ... Implement a method on the "user handler" type
+}
+
+func main() {
+    // ... initialise the handlers here
+}
+```
+
+<!-- prettier-ignore-start -->
+
+:::tip
+To learn more about organizing Go source code according to the MVC pattern, refer to the following articles:
+1. [Using MVC to Structure Go Web Applications](https://www.calhoun.io/using-mvc-to-structure-go-web-applications) by Jon Calhoun.
+2. [A Collection of Structuring Go](https://ldej.nl/post/structuring-go) by Laurence de Jong.
+:::
+
+<!-- prettier-ignore-end -->
+
+## On the Client-Side
+
+On the client-side, there are two ways to consume data from the server:
+
+- Through the pre-packaged CMS provided by the system.
+- Through the REST API endpoints exposed by the server, which can be consumed by
+  third-party applications (such as a blog).
+
+While BurzContent does not include a third-party application (like a blog), it
+does provide an interactive CMS as a web application. This web application is
+built using the [Nuxt.js](https://nuxt.com) framework to offer users a modern
+and responsive experience. For more information on developing the client-side
+application (i.e., the CMS), check out
+[the official Nuxt.js documentation](https://nuxt.com/docs/getting-started/introduction).
+
+<!-- prettier-ignore-start -->
+
+:::note
+Users of BurzContent are free to consume the public REST API endpoints using any
+application built on any technology stack capable of making network requests and
+handling JSON data. The system does not impose any specific opinions on how the
+public REST API should be consumed.
+:::
+
+<!-- prettier-ignore-end -->
