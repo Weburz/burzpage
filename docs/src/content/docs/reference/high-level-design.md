@@ -103,7 +103,7 @@ control (RBAC) and ensure only authorized users can perform certain actions.
 - **Content Creation**: Authors can create new content via the content editor.
 - **Approval Process**: Editors review and approve content before publishing.
 - **Publishing**: Content is published to the CMS and made accessible to viewers
-  via a seperate website which will fetch the contents from the CMS through an
+  via a separate website which will fetch the contents from the CMS through an
   API.
 
 ## 6. Key Features
