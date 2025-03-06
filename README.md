@@ -1,8 +1,8 @@
-# BurzPress
+# BurzContent
 
-BurzPress is a fast and lightweight Content Management System (CMS) for blogging
+BurzContent is a fast and lightweight Content Management System (CMS) for blogging
 at any scale. If you are an individual blogger or lead a team of
-editors/writers, BurzPress will fulfill all your needs! At
+editors/writers, BurzContent will fulfill all your needs! At
 [Weburz](https://weburz.com) we use it to create and maintain our marketing and
 technical blogs as well.
 
