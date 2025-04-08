@@ -18,7 +18,7 @@
     "@beoe/rehype-mermaid": "^0.4.2",
     "astro": "^4.16.18",
     "playwright": "^1.51.1",
-    "sharp": "^0.34.0",
+    "sharp": "^0.34.1",
     "typescript": "^5.8.3"
   },
   "pnpm": {
