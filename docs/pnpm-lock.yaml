@@ -15,8 +15,8 @@ importers:
         specifier: ^0.29.3
         version: 0.29.3(astro@4.16.18(rollup@4.24.0)(typescript@5.8.3))
       '@beoe/cache':
-        specifier: ^0.1.0
-        version: 0.1.0(typescript@5.8.3)
+        specifier: ^0.1.1
+        version: 0.1.1(typescript@5.8.3)
       '@beoe/pan-zoom':
         specifier: ^0.0.4
         version: 0.0.4
@@ -205,8 +205,8 @@ packages:
     resolution: {integrity: sha512-vN5p+1kl59GVKMvTHt55NzzmYVxprfJD+ql7U9NFIfKCBkYE55LYtS+WtPlaYOyzydrKI8Nezd+aZextrd+FMA==}
     engines: {node: '>=6.9.0'}
 
-  '@beoe/cache@0.1.0':
-    resolution: {integrity: sha512-aq9KSaTJ8D3sCPBRC9y9l8xxwoiN9nD7ct6FiwAT/rJj1RFJ0Kl1bfAgnMP+jPmKBh1atKvFtfx+PWRpQjERdg==}
+  '@beoe/cache@0.1.1':
+    resolution: {integrity: sha512-IrgFea2rzg56qbQhuWcklgQyF9Uz2bH0JPIn+/6/SOegERU2vLn4fd49CSdoFJj4M7DviA6mVx4h0UIqk2RkhQ==}
 
   '@beoe/fenceparser@2.3.0':
     resolution: {integrity: sha512-8BHZ2WoJ+N7kcRzLeXNuNb8v24P9ryZ5ItDpalPTcU91mw8gyv2XqubxVtoPpyssZQWqHZnF3jOCyIwJE3Rdjw==}
@@ -224,8 +224,8 @@ packages:
     resolution: {integrity: sha512-T1VhjoUdci7TJVbCHnoQY/wtWhl8g25ksjYm1E/0f4FSjbtPpgUB7hJ7n8NWYpzn7xm5/oNy3VlWodWz3e12VQ==}
     engines: {node: '>=20.0.0'}
 
-  '@beoe/sqlitecache@0.1.0':
-    resolution: {integrity: sha512-EH4/5go0mgicWhYKKDgyQIyv38tzmmgvQlfJkiEgWfPEfvZgjO6wnW9lwD+cHckCix9O1W+RJNxd5AyXVPiP0Q==}
+  '@beoe/sqlitecache@0.1.1':
+    resolution: {integrity: sha512-RxDxnriHKqjK47UMaeoodrsV/hbfnyAXXDpesk08bGaZbiZjUoRJCmFiuSrlsXLdsirWIlIxTlJRPI1NlhbW8A==}
 
   '@braintree/sanitize-url@7.1.1':
     resolution: {integrity: sha512-i1L7noDNxtFyL5DmZafWy1wRVhGehQmzZaz1HiN5e7iylJMSZR7ekOV7NsIqa5qBldlLrsKv4HbgFUVlQrz8Mw==}
@@ -1188,8 +1188,8 @@ packages:
   bcp-47@2.1.0:
     resolution: {integrity: sha512-9IIS3UPrvIa1Ej+lVDdDwO7zLehjqsaByECw0bu2RRGP73jALm6FYbzI5gWbgHLvNdkvfXB5YrSbocZdOS0c0w==}
 
-  better-sqlite3@11.8.1:
-    resolution: {integrity: sha512-9BxNaBkblMjhJW8sMRZxnxVTRgbRmssZW0Oxc1MPBTfiR+WW21e2Mk4qu8CzrcZb1LwPCnFsfDEzq+SNcBU8eg==}
+  better-sqlite3@11.9.1:
+    resolution: {integrity: sha512-Ba0KR+Fzxh2jDRhdg6TSH0SJGzb8C0aBY4hR8w8madIdIzzC6Y1+kx5qR6eS1Z+Gy20h6ZU28aeyg0z1VIrShQ==}
 
   bindings@1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
@@ -3400,9 +3400,9 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@beoe/cache@0.1.0(typescript@5.8.3)':
+  '@beoe/cache@0.1.1(typescript@5.8.3)':
     dependencies:
-      '@beoe/sqlitecache': 0.1.0
+      '@beoe/sqlitecache': 0.1.1
       cosmiconfig: 9.0.0(typescript@5.8.3)
     transitivePeerDependencies:
       - typescript
@@ -3440,9 +3440,9 @@ snapshots:
       - playwright
       - supports-color
 
-  '@beoe/sqlitecache@0.1.0':
+  '@beoe/sqlitecache@0.1.1':
     dependencies:
-      better-sqlite3: 11.8.1
+      better-sqlite3: 11.9.1
 
   '@braintree/sanitize-url@7.1.1': {}
 
@@ -4388,7 +4388,7 @@ snapshots:
       is-alphanumerical: 2.0.1
       is-decimal: 2.0.1
 
-  better-sqlite3@11.8.1:
+  better-sqlite3@11.9.1:
     dependencies:
       bindings: 1.5.0
       prebuild-install: 7.1.3
