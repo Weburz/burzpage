@@ -22,13 +22,13 @@ importers:
         version: 0.0.4
       '@beoe/rehype-mermaid':
         specifier: ^0.4.2
-        version: 0.4.2(playwright@1.54.1)
+        version: 0.4.2(playwright@1.54.2)
       astro:
         specifier: ^4.16.18
         version: 4.16.18(rollup@4.24.0)(typescript@5.9.2)
       playwright:
-        specifier: ^1.54.1
-        version: 1.54.1
+        specifier: ^1.54.2
+        version: 1.54.2
       sharp:
         specifier: ^0.34.3
         version: 0.34.3
@@ -2447,13 +2447,13 @@ packages:
   pkg-types@1.3.1:
     resolution: {integrity: sha512-/Jm5M4RvtBFVkKWRu2BLUTNP8/M2a+UwuAX+ae4770q1qVGtfjG+WTCupoZixokjmHiry8uI+dlY8KXYV5HVVQ==}
 
-  playwright-core@1.54.1:
-    resolution: {integrity: sha512-Nbjs2zjj0htNhzgiy5wu+3w09YetDx5pkrpI/kZotDlDUaYk0HVA5xrBVPdow4SAUIlhgKcJeJg4GRKW6xHusA==}
+  playwright-core@1.54.2:
+    resolution: {integrity: sha512-n5r4HFbMmWsB4twG7tJLDN9gmBUeSPcsBZiWSE4DnYz9mJMAFqr2ID7+eGC9kpEnxExJ1epttwR59LEWCk8mtA==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.54.1:
-    resolution: {integrity: sha512-peWpSwIBmSLi6aW2auvrUtf2DqY16YYcCMO8rTVx486jKmDTJg7UAhyrraP98GB8BoPURZP8+nxO7TSd4cPr5g==}
+  playwright@1.54.2:
+    resolution: {integrity: sha512-Hu/BMoA1NAdRUuulyvQC0pEqZ4vQbGfn8f7wPXcnqQmM+zct9UliKxsIkLNmz/ku7LElUNqmaiv1TG/aL5ACsw==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -3443,10 +3443,10 @@ snapshots:
       unified: 11.0.5
       unist-util-visit: 5.0.0
 
-  '@beoe/rehype-mermaid@0.4.2(playwright@1.54.1)':
+  '@beoe/rehype-mermaid@0.4.2(playwright@1.54.2)':
     dependencies:
       '@beoe/rehype-code-hook-img': 0.4.0
-      mermaid-isomorphic: 3.0.0(playwright@1.54.1)
+      mermaid-isomorphic: 3.0.0(playwright@1.54.2)
       svgo: 3.3.2
     transitivePeerDependencies:
       - playwright
@@ -5621,12 +5621,12 @@ snapshots:
 
   merge2@1.4.1: {}
 
-  mermaid-isomorphic@3.0.0(playwright@1.54.1):
+  mermaid-isomorphic@3.0.0(playwright@1.54.2):
     dependencies:
       '@fortawesome/fontawesome-free': 6.7.2
       mermaid: 11.4.1
     optionalDependencies:
-      playwright: 1.54.1
+      playwright: 1.54.2
     transitivePeerDependencies:
       - supports-color
 
@@ -6099,11 +6099,11 @@ snapshots:
       mlly: 1.7.4
       pathe: 2.0.3
 
-  playwright-core@1.54.1: {}
+  playwright-core@1.54.2: {}
 
-  playwright@1.54.1:
+  playwright@1.54.2:
     dependencies:
-      playwright-core: 1.54.1
+      playwright-core: 1.54.2
     optionalDependencies:
       fsevents: 2.3.2
 
