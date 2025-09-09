@@ -16,7 +16,7 @@
     "@beoe/cache": "^0.1.1",
     "@beoe/pan-zoom": "^0.0.4",
     "@beoe/rehype-mermaid": "^0.4.2",
-    "astro": "^5.13.5",
+    "astro": "^5.13.6",
     "playwright": "^1.55.0",
     "sharp": "^0.34.3",
     "typescript": "^5.9.2"
