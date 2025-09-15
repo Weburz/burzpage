@@ -12,18 +12,32 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/starlight": "^0.35.2",
+    "@astrojs/starlight": "^0.29.3",
     "@beoe/cache": "^0.1.1",
     "@beoe/pan-zoom": "^0.0.4",
     "@beoe/rehype-mermaid": "^0.4.2",
-    "astro": "^5.13.7",
-    "playwright": "^1.55.0",
-    "sharp": "^0.34.3",
-    "typescript": "^5.9.2"
+    "astro": "^4.16.18",
+    "astro-seo-schema": "^5.0.0",
+    "playwright": "^1.52.0",
+    "schema-dts": "^1.1.5",
+    "sharp": "^0.33.5",
+    "typescript": "^5.7.3"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "better-sqlite3"
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "prettier-plugin-astro": "^0.14.1"
+  },
+  "prettier": {
+    "plugins": [
+      "prettier-plugin-astro"
+    ],
+    "overrides": [
+      {
+        "files": "*.astro",
+        "options": {
+          "parser": "astro"
+        }
+      }
     ]
   }
 }
