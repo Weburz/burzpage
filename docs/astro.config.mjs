@@ -16,17 +16,52 @@ export default defineConfig({
       editLink: {
         baseUrl: "https://github.com/Weburz/burzpage/edit/main/docs",
       },
-      social: {
-        github: "https://github.com/Weburz/burzpage",
-        discord: "https://discord.gg/QeYqwyxBhR",
-        email: "mailto:contact@weburz.com",
-        facebook: "https://www.facebook.com/Weburz",
-        instagram: "https://www.instagram.com/weburzit",
-        linkedin: "https://www.linkedin.com/company/weburz",
-        youtube: "https://www.youtube.com/@Weburz",
-        twitter: "https://x.com/weburz",
-      },
+      social: [
+        {
+          icon: "github",
+          label: "GitHub",
+          href: "https://github.com/Weburz/burzpage",
+        },
+        {
+          icon: "discord",
+          label: "Discord",
+          href: "https://discord.gg/QeYqwyxBhR",
+        },
+        { icon: "email", label: "Email", href: "mailto:contact@weburz.com" },
+        {
+          icon: "facebook",
+          label: "Facebook",
+          href: "https://www.facebook.com/Weburz",
+        },
+        {
+          icon: "instagram",
+          label: "Instagram",
+          href: "https://www.instagram.com/weburzit",
+        },
+        {
+          icon: "linkedin",
+          label: "LinkedIn",
+          href: "https://www.linkedin.com/company/weburz",
+        },
+        {
+          icon: "youtube",
+          label: "YouTube",
+          href: "https://www.youtube.com/@Weburz",
+        },
+        { icon: "twitter", label: "Twitter", href: "https://x.com/weburz" },
+      ],
       lastUpdated: true,
+
+      head: [
+        {
+          tag: "script",
+          attrs: {
+            async: true,
+            src: "https://analytics.weburz.com/script.js",
+            "data-website-id": "74274170-19a7-46b4-ab7e-e3547032855b",
+          },
+        },
+      ],
       sidebar: [
         {
           label: "Reference",
