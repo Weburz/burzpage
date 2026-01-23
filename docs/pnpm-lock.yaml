@@ -13,7 +13,7 @@ importers:
         version: 0.9.6(prettier@3.7.0)(typescript@5.9.3)
       '@astrojs/starlight':
         specifier: ^0.37.3
-        version: 0.37.3(astro@5.16.13(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1))
+        version: 0.37.3(astro@5.16.15(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1))
       '@beoe/cache':
         specifier: ^0.1.1
         version: 0.1.1(typescript@5.9.3)
@@ -24,8 +24,8 @@ importers:
         specifier: ^0.4.2
         version: 0.4.2(playwright@1.57.0)
       astro:
-        specifier: ^5.16.13
-        version: 5.16.13(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1)
+        specifier: ^5.16.15
+        version: 5.16.15(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1)
       playwright:
         specifier: ^1.57.0
         version: 1.57.0
@@ -1060,8 +1060,8 @@ packages:
     peerDependencies:
       astro: ^4.0.0-beta || ^5.0.0-beta || ^3.3.0 || ^6.0.0-beta
 
-  astro@5.16.13:
-    resolution: {integrity: sha512-k8Zgb38wpMpJf2LSVO5mSUx2MyDTA6s11UHLPOjUStbdQow3ueREf2J0lKgXnedGtolMm0eGMbnLp1lxs4sKTw==}
+  astro@5.16.15:
+    resolution: {integrity: sha512-+X1Z0NTi2pa5a0Te6h77Dgc44fYj63j1yx6+39Nvg05lExajxSq7b1Uj/gtY45zoum8fD0+h0nak+DnHighs3A==}
     engines: {node: 18.20.8 || ^20.3.0 || >=22.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
 
@@ -2660,6 +2660,9 @@ packages:
   unist-util-visit@5.0.0:
     resolution: {integrity: sha512-MR04uvD+07cwl/yhVuVWAtw+3GOR/knlL55Nd/wAdblk27GCVt3lqpTivy/tkJcZoNPzTwS1Y+KMojlLDhoTzg==}
 
+  unist-util-visit@5.1.0:
+    resolution: {integrity: sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg==}
+
   unstorage@1.17.4:
     resolution: {integrity: sha512-fHK0yNg38tBiJKp/Vgsq4j0JEsCmgqH58HAn707S7zGkArbZsVr/CwINoi+nh3h98BRCwKvx1K3Xg9u3VV83sw==}
     peerDependencies:
@@ -3030,18 +3033,18 @@ snapshots:
       smol-toml: 1.6.0
       unified: 11.0.5
       unist-util-remove-position: 5.0.0
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
       unist-util-visit-parents: 6.0.2
       vfile: 6.0.3
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/mdx@4.3.13(astro@5.16.13(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1))':
+  '@astrojs/mdx@4.3.13(astro@5.16.15(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1))':
     dependencies:
       '@astrojs/markdown-remark': 6.3.10
       '@mdx-js/mdx': 3.1.1
       acorn: 8.15.0
-      astro: 5.16.13(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1)
+      astro: 5.16.15(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1)
       es-module-lexer: 1.7.0
       estree-util-visit: 2.0.0
       hast-util-to-html: 9.0.5
@@ -3065,17 +3068,17 @@ snapshots:
       stream-replace-string: 2.0.0
       zod: 3.25.76
 
-  '@astrojs/starlight@0.37.3(astro@5.16.13(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1))':
+  '@astrojs/starlight@0.37.3(astro@5.16.15(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1))':
     dependencies:
       '@astrojs/markdown-remark': 6.3.10
-      '@astrojs/mdx': 4.3.13(astro@5.16.13(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1))
+      '@astrojs/mdx': 4.3.13(astro@5.16.15(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1))
       '@astrojs/sitemap': 3.7.0
       '@pagefind/default-ui': 1.4.0
       '@types/hast': 3.0.4
       '@types/js-yaml': 4.0.9
       '@types/mdast': 4.0.4
-      astro: 5.16.13(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1)
-      astro-expressive-code: 0.41.6(astro@5.16.13(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1))
+      astro: 5.16.15(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1)
+      astro-expressive-code: 0.41.6(astro@5.16.15(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1))
       bcp-47: 2.1.0
       hast-util-from-html: 2.0.3
       hast-util-select: 6.0.4
@@ -3165,7 +3168,7 @@ snapshots:
       hast-util-from-html-isomorphic: 2.0.0
       hast-util-to-text: 4.0.2
       unified: 11.0.5
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
 
   '@beoe/rehype-mermaid@0.4.2(playwright@1.57.0)':
     dependencies:
@@ -3331,7 +3334,7 @@ snapshots:
       hastscript: 9.0.1
       postcss: 8.5.6
       postcss-nested: 6.2.0(postcss@8.5.6)
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
       unist-util-visit-parents: 6.0.2
 
   '@expressive-code/plugin-frames@0.41.6':
@@ -3487,7 +3490,7 @@ snapshots:
       unified: 11.0.5
       unist-util-position-from-estree: 2.0.0
       unist-util-stringify-position: 4.0.0
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
       vfile: 6.0.3
     transitivePeerDependencies:
       - supports-color
@@ -3983,12 +3986,12 @@ snapshots:
 
   astring@1.9.0: {}
 
-  astro-expressive-code@0.41.6(astro@5.16.13(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1)):
+  astro-expressive-code@0.41.6(astro@5.16.15(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1)):
     dependencies:
-      astro: 5.16.13(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1)
+      astro: 5.16.15(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1)
       rehype-expressive-code: 0.41.6
 
-  astro@5.16.13(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1):
+  astro@5.16.15(@types/node@25.0.3)(rollup@4.56.0)(typescript@5.9.3)(yaml@2.8.1):
     dependencies:
       '@astrojs/compiler': 2.13.0
       '@astrojs/internal-helpers': 0.7.5
@@ -4042,7 +4045,7 @@ snapshots:
       tsconfck: 3.1.6(typescript@5.9.3)
       ultrahtml: 1.6.0
       unifont: 0.7.3
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
       unstorage: 1.17.4
       vfile: 6.0.3
       vite: 6.4.1(@types/node@25.0.3)(yaml@2.8.1)
@@ -4818,7 +4821,7 @@ snapshots:
       mdast-util-to-hast: 13.2.1
       parse5: 7.3.0
       unist-util-position: 5.0.0
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
       vfile: 6.0.3
       web-namespaces: 2.0.1
       zwitch: 2.0.4
@@ -5077,7 +5080,7 @@ snapshots:
     dependencies:
       '@types/mdast': 4.0.4
       '@types/unist': 3.0.3
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
 
   mdast-util-directive@3.1.0:
     dependencies:
@@ -5237,7 +5240,7 @@ snapshots:
       micromark-util-sanitize-uri: 2.0.1
       trim-lines: 3.0.1
       unist-util-position: 5.0.0
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
       vfile: 6.0.3
 
   mdast-util-to-markdown@2.1.2:
@@ -5939,7 +5942,7 @@ snapshots:
       retext: 9.0.0
       retext-smartypants: 6.2.0
       unified: 11.0.5
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
 
   remark-stringify@11.0.0:
     dependencies:
@@ -5967,7 +5970,7 @@ snapshots:
     dependencies:
       '@types/nlcst': 2.0.3
       nlcst-to-string: 4.0.0
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
 
   retext-stringify@4.0.0:
     dependencies:
@@ -6274,7 +6277,7 @@ snapshots:
   unist-util-remove-position@5.0.0:
     dependencies:
       '@types/unist': 3.0.3
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
 
   unist-util-stringify-position@4.0.0:
     dependencies:
@@ -6290,6 +6293,12 @@ snapshots:
       unist-util-is: 6.0.1
 
   unist-util-visit@5.0.0:
+    dependencies:
+      '@types/unist': 3.0.3
+      unist-util-is: 6.0.1
+      unist-util-visit-parents: 6.0.2
+
+  unist-util-visit@5.1.0:
     dependencies:
       '@types/unist': 3.0.3
       unist-util-is: 6.0.1
