@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
-    "@astrojs/starlight": "^0.37.3",
+    "@astrojs/starlight": "^0.37.4",
     "@beoe/cache": "^0.1.1",
     "@beoe/pan-zoom": "^0.0.4",
     "@beoe/rehype-mermaid": "^0.4.2",
