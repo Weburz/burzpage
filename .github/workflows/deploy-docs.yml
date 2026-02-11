@@ -18,10 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.2
 
       - name: Install & Build the Docs
-        uses: withastro/action@v4.2.0
+        uses: withastro/action@v5.1.0
         with:
           path: docs
           package-manager: pnpm
