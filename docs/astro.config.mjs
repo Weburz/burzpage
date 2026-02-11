@@ -57,7 +57,7 @@ export default defineConfig({
           tag: "script",
           attrs: {
             async: true,
-            src: "https://analytics.weburz.com/script.js",
+            src: "https://umami.weburz.com/script.js",
             "data-website-id": "74274170-19a7-46b4-ab7e-e3547032855b",
           },
         },
